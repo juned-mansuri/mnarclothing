@@ -158,17 +158,18 @@ const placeOrderRazorpay = async (req,res) => {
             receipt : newOrder._id.toString()
 
         }
+        console.log("Razorpay options:", options);
 
-        await razorpayInstance.orders.create(options,(error,orders)=>{
-            if (error) {
-                console.log(error)
-                return res.json({success:false,message:error})
-                
-            }
-            res.json({sucess:true,order})
-
-        })
         
+       // Use promise version instead of callback for better error handling
+    try {
+        const order = await razorpayInstance.orders.create(options);
+        console.log("Razorpay order created:", order);
+        res.json({success: true, order});
+      } catch (err) {
+        console.log("Razorpay order creation error:", err);
+        res.json({success: false, message: err.message || "Failed to create payment order"});
+      }
     } catch (error) {
         console.log(error)
             res.json({success:false,message:error.message})   
@@ -180,9 +181,16 @@ const placeOrderRazorpay = async (req,res) => {
 
 const verifyRazorpay = async (req,res) => {
     try {
+        console.log("Verifying payment:", req.body);
         const {userId,razorpay_order_id} = req.body
 
-        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+        if (!razorpay_order_id) {
+            return res.json({success: false, message: "Missing order ID"});
+          }
+
+        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
+        console.log("Order info:", orderInfo);
+
         if (orderInfo.status === 'paid') {
             await orderModel.findByIdAndUpdate(orderInfo.receipt,{payment:true});
             await userModel.findByIdAndUpdate(userId,{cartData:{}})
@@ -190,12 +198,13 @@ const verifyRazorpay = async (req,res) => {
 
             
         }else{
-            res.json({success:false,message:"Payment failed"})
+           console.log("Payment not verified. Status:", orderInfo.status);
+      res.json({success: false, message: "Payment verification failed"});
         }
 
     } catch (error) {
-        console.log(error)
-            res.json({success:false,message:error.message})   
+        console.log("Verification error:", error);
+        res.json({success: false, message: error.message || "Payment verification failed"});  
     }
     
 }
