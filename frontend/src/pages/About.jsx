@@ -11,12 +11,12 @@ const About = () => {
         </div>
 
         <div className=' my-10 flex flex-col md:flex-row gap-16'>
-          <img className=' w-full md:max-w-[450px]' src={assets.about_img} alt="" />
+          <img className=' w-full md:max-w-[450px]' src={assets.mnarlogo2} alt="" />
           <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
-          <p>Veyn Collection is more than just a clothing brand—it's a celebration of individuality and self-expression. Each piece in our collection is thoughtfully designed to combine elegance, comfort, and versatility. We believe in empowering everyone to wear their confidence and embrace their unique style.</p>
+          <p>Mnar Clothing is more than just a clothing brand—it's a celebration of individuality and self-expression. Each piece in our collection is thoughtfully designed to combine elegance, comfort, and versatility. We believe in empowering everyone to wear their confidence and embrace their unique style.</p>
           <p>From timeless classics to bold statement pieces, our designs are crafted with meticulous attention to detail and premium quality fabrics, ensuring you look and feel your best every day.</p>
             <b className='text-gray-800'>Our Mission</b>
-            <p>At Veyn Collection, our mission is to redefine fashion by blending contemporary trends with timeless craftsmanship. We aim to create clothing that inspires confidence, sparks creativity, and resonates with people from all walks of life.</p>
+            <p>At Mnar Clothing, our mission is to redefine fashion by blending contemporary trends with timeless craftsmanship. We aim to create clothing that inspires confidence, sparks creativity, and resonates with people from all walks of life.</p>
           </div>
 
         </div>
@@ -27,7 +27,7 @@ const About = () => {
         <div className='flex flex-col md:flex-row text-sm mb-20'>
             <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
               <b>Quality Assurance:</b>
-              <p className=' text-gray-600'>At Veyn Collection, we prioritize quality in every garment we create. Our clothes are made with premium materials that ensure durability, comfort, and long-lasting wear. Each piece undergoes rigorous quality checks, so you can trust that you're getting only the best.</p>
+              <p className=' text-gray-600'>At Mnar Clothing, we prioritize quality in every garment we create. Our clothes are made with premium materials that ensure durability, comfort, and long-lasting wear. Each piece undergoes rigorous quality checks, so you can trust that you're getting only the best.</p>
               </div>
             <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
               <b>Convenience</b>

@@ -12,11 +12,11 @@ const Contact = () => {
       </div>
 
       <div className='my-10 flex flex-col justify-center md:flex-row gap-10 mb-28'>
-        <img className='w-full md:max-w-[480px]' src={assets.contact_img} alt="" />
+        <img className='w-full md:max-w-[480px]' src={assets.mnarlogobird} alt="" />
         <div className='flex flex-col justify-center items-start gap-6'>
           <p className=' font-semibold text-xl text-gray-600'>Our Store</p>
           <p className=' text-gray-500'>458001 , kityani <br /> Mandsaur , Madhya Pradesh</p>
-          <p className=' text-gray-500'>Tel: (+91) 8821851060 <br /> Email : 0junedmansuri@gmail.com</p>
+          <p className=' text-gray-500'>Tel: (+91) 7804023523 <br /> Email : mnarclothing@gmail.com</p>
           <p className=' font-semibold text-xl text-gray-600'>Careers At our Business</p>
           <p className=' text-gray-500'>Learn More about Our team and job openings.</p>
           <a href="#contact">

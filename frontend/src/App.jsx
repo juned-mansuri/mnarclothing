@@ -21,7 +21,7 @@ import Terms from './pages/Terms'
 
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-[#F2F9FF]'>
+    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-[#ffffff]'>
       <ToastContainer/>
       <Navbar/>
       <SearchBar/>

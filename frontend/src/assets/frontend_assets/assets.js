@@ -22,7 +22,9 @@ import blackvid from './Black.webm'
 import pistavid from './pista.webm'
 import purplevid from './purple.webm'
 import whitevid from './white.webm'
-
+import mnarlogo from './mnar logo.png'
+import mnarlogo2 from './mnar logo 2.png'
+import mnarlogobird from './mnar bird.png'
 
 export const assets = {
     logo,
@@ -47,4 +49,7 @@ export const assets = {
     purplevid,
     pistavid,
     whitevid,
+    mnarlogo,
+    mnarlogo2,
+    mnarlogobird
 }

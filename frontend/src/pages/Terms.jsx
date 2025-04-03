@@ -10,7 +10,7 @@ const Terms = () => {
         </h1>
         <p className="mb-4 text-2xl text-gray-600   ">Last updated on Apr 1st 2025</p>
         <p className="mb-4 text-lg">
-        For the purpose of these Terms and Conditions, The term "we", "us", "our" used anywhere on this page shall mean Veyn Collection, whose registered/operational office is Kitiyani , Mandsaur Mandsaur MADHYA PRADESH 458001 . "you", “your”, "user", “visitor” shall mean any natural or legal person who is visiting our website and/or agreed to purchase from us.
+        For the purpose of these Terms and Conditions, The term "we", "us", "our" used anywhere on this page shall mean Mnar Clothing, whose registered/operational office is Kitiyani , Mandsaur Mandsaur MADHYA PRADESH 458001 . "you", “your”, "user", “visitor” shall mean any natural or legal person who is visiting our website and/or agreed to purchase from us.
         </p>
 
         <div className="space-y-6">
@@ -36,7 +36,7 @@ const Terms = () => {
               </li>
               <li>Unauthorized use of information provided by us shall give rise to a claim for damages and/or be a criminal offense.</li>
               <li>From time to time our website may also include links to other websites. These links are provided for your convenience to provide further information.</li>
-              <li>You may not create a link to our website from another website or document without Veyn Collection’s prior written consent.</li>
+              <li>You may not create a link to our website from another website or document without Mnar Clothing's prior written consent.</li>
               <li>Any dispute arising out of use of our website and/or purchase with us and/or any engagement with us is subject to the laws of India .</li>
               <li>We, shall be under no liability whatsoever in respect of any loss or damage arising directly or indirectly out of the decline of authorization for any Transaction, on Account of the Cardholder having exceeded the preset limit mutually agreed by us with our acquiring bank from time to time</li>
             </ul>
@@ -71,7 +71,7 @@ const Terms = () => {
         </h1>
         <p className="mb-4 text-2xl text-gray-600">Last updated on Apr 1st 2025</p>
         <p className="mb-4 text-lg">
-        Veyn Collection believes in helping its customers as far as possible, and has therefore a liberal cancellation policy. Under this policy:
+        Mnar Clothing believes in helping its customers as far as possible, and has therefore a liberal cancellation policy. Under this policy:
         </p>
 
         <div className="space-y-6">
@@ -85,7 +85,7 @@ const Terms = () => {
 
 
               </li>
-              <li>Veyn Collection does not accept cancellation requests for perishable items like flowers, eatables etc. However, refund/replacement can be made if the customer establishes that the quality of product delivered is not good.</li>
+              <li>Mnar Clothing does not accept cancellation requests for perishable items like flowers, eatables etc. However, refund/replacement can be made if the customer establishes that the quality of product delivered is not good.</li>
               <li>
               In case of receipt of damaged or defective items please report the same to our Customer Service team. The request will, however, be entertained once the merchant has checked and determined the same at his own end. This should be reported within 2-3 days of receipt of the products.
               </li>
@@ -99,7 +99,7 @@ const Terms = () => {
 
 
               </li>
-              <li>In case of any Refunds approved by the Veyn Collection, it’ll take 3-4 days for the refund to be processed to the end customer.</li>
+              <li>In case of any Refunds approved by the Mnar Clothing, it’ll take 3-4 days for the refund to be processed to the end customer.</li>
         
             </ul>
           </div>
@@ -111,7 +111,7 @@ const Terms = () => {
             <p className="mb-4 text-2xl text-gray-600">Last updated on Apr 1st 2025</p>
             <ul className="list-disc list-inside text-lg mt-2">
               <li>
-              For International buyers, orders are shipped and delivered through registered international courier companies and/or International speed post only. For domestic buyers, orders are shipped through registered domestic courier companies and /or speed post only. Orders are shipped within 0-7 days or as per the delivery date agreed at the time of order confirmation and delivering of the shipment subject to Courier Company / post office norms. Veyn Collection is not liable for any delay in delivery by the courier company / postal authorities and only guarantees to hand over the consignment to the courier company or postal authorities within 0-7 days rom the date of the order and payment or as per the delivery date agreed at the time of order confirmation. Delivery of all orders will be to the address provided by the buyer. Delivery of our services will be confirmed on your mail ID as specified during registration. For any issues in utilizing our services you may contact our helpdesk on 8821851060 or 0junedmansuri@gmail.com
+              For International buyers, orders are shipped and delivered through registered international courier companies and/or International speed post only. For domestic buyers, orders are shipped through registered domestic courier companies and /or speed post only. Orders are shipped within 0-7 days or as per the delivery date agreed at the time of order confirmation and delivering of the shipment subject to Courier Company / post office norms. Mnar Clothing is not liable for any delay in delivery by the courier company / postal authorities and only guarantees to hand over the consignment to the courier company or postal authorities within 0-7 days rom the date of the order and payment or as per the delivery date agreed at the time of order confirmation. Delivery of all orders will be to the address provided by the buyer. Delivery of our services will be confirmed on your mail ID as specified during registration. For any issues in utilizing our services you may contact our helpdesk on 8821851060 or 0junedmansuri@gmail.com
               </li>
          
             </ul>
@@ -129,10 +129,10 @@ const Terms = () => {
         <ul className="list-disc list-inside text-lg mt-2">
           <li>
             <span className="font-semibold">Email:</span>{" "}
-            0junedmansuri@gmail.com
+            mnarclothing@gmail.com
           </li>
           <li>
-            <span className="font-semibold">Phone:</span> +91 8821851060
+            <span className="font-semibold">Phone:</span> +91 7804023523
           </li>
           <li>
             <span className="font-semibold">Address:</span> kityani, Mandsaur,

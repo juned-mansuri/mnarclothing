@@ -137,19 +137,19 @@ const Add = ({token}) => {
         <p className=" mb-2">Product Sizes</p>
         <div className="flex gap-3">
           <div onClick={()=> setSizes(prev => prev.includes("S") ? prev.filter(item => item !== "S") : [...prev,"S"])}>
-            <p className={` ${sizes.includes("S") ? 'bg-[#b9fffd]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>S</p>
+            <p className={` ${sizes.includes("S") ? 'bg-[#6f00ff]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>S</p>
           </div>
           <div onClick={()=> setSizes(prev => prev.includes("M") ? prev.filter(item => item !== "M"):[...prev ,"M"])}>
-            <p className={` ${sizes.includes("M") ? 'bg-[#b9fffd]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>M</p>
+            <p className={` ${sizes.includes("M") ? 'bg-[#6f00ff]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>M</p>
           </div>
           <div onClick={()=> setSizes(prev => prev.includes("L") ? prev.filter(item => item !== "L"):[...prev ,"L"])}>
-            <p className={` ${sizes.includes("L") ? 'bg-[#b9fffd]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>L</p>
+            <p className={` ${sizes.includes("L") ? 'bg-[#6f00ff]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>L</p>
           </div>
           <div onClick={()=> setSizes(prev => prev.includes("XL") ? prev.filter(item => item !== "XL"):[...prev ,"XL"])}>
-            <p className={` ${sizes.includes("XL") ? 'bg-[#b9fffd]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>XL</p>
+            <p className={` ${sizes.includes("XL") ? 'bg-[#6f00ff]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>XL</p>
           </div>
           <div onClick={()=> setSizes(prev => prev.includes("XXL") ? prev.filter(item => item !== "XXL"):[...prev ,"XXL"])}>
-            <p className={` ${sizes.includes("XXL") ? 'bg-[#b9fffd]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>XXL</p>
+            <p className={` ${sizes.includes("XXL") ? 'bg-[#6f00ff]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>XXL</p>
           </div>
         </div>
       </div>

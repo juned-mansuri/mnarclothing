@@ -39,15 +39,13 @@ const PlaceOrder = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-
   // At the top of your component, add this useEffect to load the script
-useEffect(() => {
-  const script = document.createElement('script');
-  script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-  script.async = true;
-  document.body.appendChild(script);
-}, []);
-
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   const initPay = (order) => {
     console.log("Initializing payment with order:", order);
@@ -68,30 +66,28 @@ useEffect(() => {
       prefill: {
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
-        contact: formData.phone
+        contact: formData.phone,
       },
       notes: {
-        address: `${formData.street}, ${formData.city}, ${formData.state}`
+        address: `${formData.street}, ${formData.city}, ${formData.state}`,
       },
       theme: {
-        color: '#3399cc'
+        color: "#3399cc",
       },
       handler: async (response) => {
         console.log("Payment successful", response);
 
         try {
-          
           const { data } = await axios.post(
             backendUrl + "/api/order/verifyRazorpay",
-            response, 
+            response,
             { headers: { token } }
           );
           if (data.success) {
             toast.success("Payment successful!");
             navigate("/orders");
             setCartItems({});
-          }
-          else{
+          } else {
             toast.error(data.message || "Payment verification failed");
           }
         } catch (error) {
@@ -99,32 +95,31 @@ useEffect(() => {
           toast.error(error.message || "Payment verification failed");
         }
       },
-       // Add this to handle user-canceled payments
-    modal: {
-      ondismiss: function() {
-        console.log("Payment dismissed");
-        toast.error("Payment canceled by user");
-      }
-    }
+      // Add this to handle user-canceled payments
+      modal: {
+        ondismiss: function () {
+          console.log("Payment dismissed");
+          toast.error("Payment canceled by user");
+        },
+      },
     };
-    
+
     console.log("Razorpay options:", options);
 
+    // Create Razorpay instance and open checkout
+    try {
+      const rzp = new window.Razorpay(options);
 
-      // Create Razorpay instance and open checkout
-  try {
-    const rzp = new window.Razorpay(options);
-    
-    rzp.on('payment.failed', function(response) {
-      console.error("Payment failed:", response.error);
-      toast.error(response.error.description || "Payment failed");
-    });
-    
-    rzp.open();
-  } catch (error) {
-    console.error("Razorpay initialization error:", error);
-    toast.error("Failed to initialize payment");
-  }
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment failed:", response.error);
+        toast.error(response.error.description || "Payment failed");
+      });
+
+      rzp.open();
+    } catch (error) {
+      console.error("Razorpay initialization error:", error);
+      toast.error("Failed to initialize payment");
+    }
   };
 
   const onSubmitHandler = async (event) => {
@@ -185,29 +180,33 @@ useEffect(() => {
 
           break;
 
-        case "razorpay":{
+        case "razorpay":
+          {
+            try {
+              const responseRazorPay = await axios.post(
+                backendUrl + "/api/order/razorpay",
+                orderData,
+                { headers: { token } }
+              );
 
+              console.log("Razorpay response:", responseRazorPay.data);
 
-          try {
-    const responseRazorPay = await axios.post(
-      backendUrl + '/api/order/razorpay',
-      orderData,
-      {headers: {token}}
-    );
-    
-    console.log("Razorpay response:", responseRazorPay.data);
-    
-    if (responseRazorPay.data.success && responseRazorPay.data.order) {
-      // Make sure to call initPay with the order data
-      initPay(responseRazorPay.data.order);
-    } else {
-      toast.error(responseRazorPay.data.message || "Failed to create payment");
-    }
-  } catch (error) {
-    console.error("Razorpay order error:", error);
-    toast.error(error.message || "Failed to create payment order");
-  }
-        }
+              if (
+                responseRazorPay.data.success &&
+                responseRazorPay.data.order
+              ) {
+                // Make sure to call initPay with the order data
+                initPay(responseRazorPay.data.order);
+              } else {
+                toast.error(
+                  responseRazorPay.data.message || "Failed to create payment"
+                );
+              }
+            } catch (error) {
+              console.error("Razorpay order error:", error);
+              toast.error(error.message || "Failed to create payment order");
+            }
+          }
           break;
         default:
           break;
@@ -219,10 +218,8 @@ useEffect(() => {
   };
 
   return (
-    <form
-      onSubmit={onSubmitHandler}
-      className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
-    >
+    <form onSubmit={onSubmitHandler}
+      className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t" >
       {/* left Side */}
       <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
         <div className="text-xl sm:text-2xl my-3">
@@ -319,14 +316,15 @@ useEffect(() => {
       </div>
       {/* Right Side */}
       <div className="mt-8">
-        <div className="mt-8 min-w-80">
+            <div className="mt-8 min-w-80">
           <CartTotal />
-        </div>
-        <div className="mt-12">
+           </div>
+           <div className="mt-12">
           <Title text1={"PAYMENT"} text2={"METHOD"} />
           {/* Payment Methods  */}
+
           <div className="flex gap-3 flex-col lg:flex-row">
-            <div
+             <div
               onClick={() => setMethod("stripe")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
             >
@@ -336,7 +334,8 @@ useEffect(() => {
                 } `}
               ></p>
               <img className="h-5 mx-4" src={assets.stripe_logo} alt="" />
-            </div>
+             </div>
+
             <div
               onClick={() => setMethod("razorpay")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
@@ -373,8 +372,9 @@ useEffect(() => {
               PLACE ORDER
             </button>
           </div>
-        </div>
+           </div>
       </div>
+
     </form>
   );
 };

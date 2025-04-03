@@ -1,2 +1,2 @@
-# Veyn Collection 
-Live Demo - [Veyn Collection](https://veyncollection.vercel.app/)
+# Mnar Clothing
+Live Demo - [Mnar Clothing](http://mnarclothing.in/)
