@@ -6,7 +6,7 @@ const NewsLetterBox = () => {
 
     // }
 
-    const [state, handleSubmit] = useForm("movqrkqe");
+    const [state, handleSubmit] = useForm("mkgjqbdy");
   if (state.succeeded) {
       return <div className='text-3xl text-center prata-regular'>Thanks for Sharing Your Thoughts , we Will Look for improving</div>;
   }
