@@ -29,10 +29,8 @@ const Hero = () => {
           </button>
         </div>
         <div className="flex justify-center h-[50vh] overflow-hidden bg-black rounded-2xl ">
-          <video className='w-44 sm:w-1/2 m-0 p-0 sm:p-10 sm:py-12' src={assets.whitevid} autoPlay muted loop  ></video>
-          <video className='w-44 sm:w-1/2 m-0 p-0 sm:p-10 sm:py-12' src={assets.blackvid} autoPlay muted loop  ></video>
-          <video className='w-44 sm:w-1/2 m-0 p-0 sm:p-10 sm:py-12' src={assets.pistavid} autoPlay muted loop  ></video>
-          <video className='w-44 sm:w-1/2 m-0 p-0 sm:p-10 sm:py-12' src={assets.purplevid} autoPlay muted loop  ></video>
+          <video className='w-96 sm:w-full m-0 p-0 ' src={assets.mnarvideo} autoPlay muted loop  ></video>
+          
           {/* <img
             src="https://via.placeholder.com/400x500"
             alt="Model wearing Dolenga wear"

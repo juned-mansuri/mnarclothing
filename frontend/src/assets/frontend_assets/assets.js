@@ -25,6 +25,7 @@ import whitevid from './white.webm'
 import mnarlogo from './mnar logo.png'
 import mnarlogo2 from './mnar logo 2.png'
 import mnarlogobird from './mnar bird.png'
+import mnarvideo from './mnarvideo.webm'
 
 export const assets = {
     logo,
@@ -51,5 +52,6 @@ export const assets = {
     whitevid,
     mnarlogo,
     mnarlogo2,
-    mnarlogobird
+    mnarlogobird,
+    mnarvideo
 }
