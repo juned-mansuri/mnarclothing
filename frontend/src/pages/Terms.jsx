@@ -111,7 +111,7 @@ const Terms = () => {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h1 className="text-4xl font-bold text-center mb-6 mt-6 text-gray-900">
             Cancellation & Refund Policy
           </h1>
@@ -196,7 +196,7 @@ const Terms = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <h1 className="text-4xl font-bold text-center mt-10 mb-6 text-gray-900">
           Contact Us
