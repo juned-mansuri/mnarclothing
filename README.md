@@ -1,2 +1,2 @@
 # Mnar Clothing
-Live Demo - [Mnar Clothing](http://mnarclothing.in/)
+Live Demo - [Mnar Clothing](http://mnar.in/)
