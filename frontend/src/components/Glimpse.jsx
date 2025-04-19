@@ -28,7 +28,7 @@ const Glimpse = () => {
       <div className="w-full sm:w-3/4 md:w-full   relative rounded-[20px] overflow-hidden mt-4 mb-4">
         <div className="w-full flex flex-row md:flex-row items-center justify-center gap-6 md:gap-12 text-center">
           {/* Left Text */}
-          <div className="text-2xl sm:text-4xl md:text-4xl font-semibold text-black prata-regular">
+          <div className="text-2xl sm:text-4xl md:text-6xl font-thin text-black prata-regular">
             Served
           </div>
 
@@ -50,7 +50,7 @@ const Glimpse = () => {
           </div>
 
           {/* Right Text */}
-          <div className="text-xl sm:text-2xl md:text-4xl font-semibold text-black prata-regular">
+          <div className="text-xl sm:text-2xl md:text-6xl font-semibold text-black prata-regular">
             Warm Meals
           </div>
         </div>
