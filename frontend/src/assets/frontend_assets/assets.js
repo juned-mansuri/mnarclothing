@@ -26,6 +26,11 @@ import mnarlogo from './mnar logo.png'
 import mnarlogo2 from './mnar logo 2.png'
 import mnarlogobird from './mnar bird.png'
 import mnarvideo from './mnarvideo.webm'
+import rose from './rose.webm'
+import famous from './famous.webm'
+import galaxy from './galaxy.webm'
+import SW from './SW.webm'
+import UL from './UL.webm'
 
 export const assets = {
     logo,
@@ -53,5 +58,11 @@ export const assets = {
     mnarlogo,
     mnarlogo2,
     mnarlogobird,
-    mnarvideo
+    mnarvideo,
+    rose,
+    famous,
+    galaxy,
+    SW,
+    UL,
+    
 }
