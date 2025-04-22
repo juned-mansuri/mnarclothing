@@ -7,7 +7,7 @@ import InfiniteScroll from "./InfiniteScroll";
 import axios from "axios";
 
 const Glimpse = () => {
-  const { navigate } = useContext(ShopContext);
+  const { navigate , backendUrl } = useContext(ShopContext);
   const [glimpses, setGlimpses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
