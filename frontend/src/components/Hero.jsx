@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { assets } from "../assets/frontend_assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import LiquidChrome from "./LiquidChrome";
@@ -7,33 +7,48 @@ import ShinyText from "./ShinyText";
 const Hero = () => {
   const { navigate } = useContext(ShopContext);
 
+  const videoRefs = useRef([]);
+  const [allVideosReady, setAllVideosReady] = useState(false);
+
+  useEffect(() => {
+    let loadedCount = 0;
+
+    const onVideoReady = () => {
+      loadedCount++;
+      if (loadedCount === videoRefs.current.length) {
+        setAllVideosReady(true);
+      }
+    };
+
+    videoRefs.current.forEach((video) => {
+      if (video.readyState >= 3) {
+        onVideoReady();
+      } else {
+        video.addEventListener("canplaythrough", onVideoReady);
+      }
+    });
+
+    return () => {
+      videoRefs.current.forEach((video) => {
+        video.removeEventListener("canplaythrough", onVideoReady);
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (allVideosReady) {
+      videoRefs.current.forEach((video) => {
+        video.play();
+      });
+    }
+  }, [allVideosReady]);
+
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "50vh",
-        position: "relative",
-        borderRadius: "20px",
-        overflow: "hidden",
-      }}
-    >
-      <LiquidChrome
-        baseColor={[0.1, 0.1, 0.1]}
-        speed={0.3}
-        amplitude={0.4}
-        interactive={true}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: 1,
-          width: "100%",
-        }}
-      >
+    <div className="w-full h-[50vh] relative rounded-2xl overflow-hidden">
+      <LiquidChrome baseColor={[0.1, 0.1, 0.1]} speed={0.3} amplitude={0.4} interactive={true} />
+      <div className="absolute top-0 left-0 z-[1] w-full">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-8 px-4 sm:px-8 py-8">
-          <div className="w-full sm:w-full flex items-center justify-center py-10 sm:py-0">
+          <div className="w-full flex items-center justify-center py-10 sm:py-0">
             <section>
               <div className="container mx-auto items-center">
                 <div className="text-center absolute -translate-x-1/2 left-1/2 top-1/3 sm:top-1/2 z-50 transform -translate-y-1/2">
@@ -79,19 +94,18 @@ const Hero = () => {
 
                   {/* Desktop videos */}
                   <div className="hidden lg:flex w-full h-full">
-                    {[assets.rose, assets.famous, assets.galaxy, assets.UL].map(
-                      (src, index) => (
-                        <video
-                          key={index}
-                          className="min-w-[200px] max-w-[300px] mx-2 object-contain mix-blend-screen pointer-events-none animate-float"
-                          src={src}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                        />
-                      )
-                    )}
+                    {[assets.rose, assets.famous, assets.galaxy, assets.UL].map((src, index) => (
+                      <video
+                        key={index}
+                        ref={(el) => (videoRefs.current[index] = el)}
+                        className="min-w-[200px] max-w-[300px] mx-2 object-contain mix-blend-screen pointer-events-none animate-float"
+                        src={src}
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
