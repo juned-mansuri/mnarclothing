@@ -2,9 +2,9 @@ import { v2 as cloudinary } from "cloudinary";
 import glimpseModel from "../models/glimpseModel.js";
 
 // Function to add a glimpse
+// In your glimpseController.js
 const addGlimpse = async (req, res) => {
     try {
-        // Handle adding a glimpse
         const image = req.file;
 
         if (!image) {
@@ -14,12 +14,15 @@ const addGlimpse = async (req, res) => {
             });
         }
 
-        // Upload to Cloudinary
-        const result = await cloudinary.uploader.upload(image.path, {
+        // Create a base64 data URI from the buffer
+        const dataURI = `data:${image.mimetype};base64,${image.buffer.toString('base64')}`;
+        
+        // Upload to Cloudinary using the buffer
+        const result = await cloudinary.uploader.upload(dataURI, {
             resource_type: "image",
         });
-
-        // Create a new glimpse
+        
+        // The rest of your code remains the same
         const glimpseData = {
             image: result.secure_url,
             date: Date.now(),
