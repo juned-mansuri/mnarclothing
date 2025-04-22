@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/frontend_assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import LiquidChrome from "./LiquidChrome";
@@ -6,42 +6,28 @@ import ShinyText from "./ShinyText";
 
 const Hero = () => {
   const { navigate } = useContext(ShopContext);
+  const [videosLoaded, setVideosLoaded] = useState(0);
+  const totalVideos = 4;
+  const videoSources = [assets.rose, assets.famous, assets.galaxy, assets.UL];
 
-  const videoRefs = useRef([]);
-  const [allVideosReady, setAllVideosReady] = useState(false);
-
-  useEffect(() => {
-    let loadedCount = 0;
-
-    const onVideoReady = () => {
-      loadedCount++;
-      if (loadedCount === videoRefs.current.length) {
-        setAllVideosReady(true);
-      }
-    };
-
-    videoRefs.current.forEach((video) => {
-      if (video.readyState >= 3) {
-        onVideoReady();
-      } else {
-        video.addEventListener("canplaythrough", onVideoReady);
-      }
+  // Use a simpler approach to video loading
+  const handleVideoLoaded = () => {
+    setVideosLoaded(prevCount => {
+      const newCount = prevCount + 1;
+      console.log(`Video loaded. Total loaded: ${newCount}/${totalVideos}`);
+      return newCount;
     });
+  };
 
-    return () => {
-      videoRefs.current.forEach((video) => {
-        video.removeEventListener("canplaythrough", onVideoReady);
-      });
-    };
-  }, []);
-
+  // Debug logs for asset URLs
   useEffect(() => {
-    if (allVideosReady) {
-      videoRefs.current.forEach((video) => {
-        video.play();
-      });
-    }
-  }, [allVideosReady]);
+    console.log("Video sources:", {
+      rose: assets.rose,
+      famous: assets.famous, 
+      galaxy: assets.galaxy,
+      UL: assets.UL
+    });
+  }, []);
 
   return (
     <div className="w-full h-[50vh] relative rounded-2xl overflow-hidden">
@@ -90,22 +76,47 @@ const Hero = () => {
                     muted
                     loop
                     playsInline
+                    onCanPlay={() => console.log("Mobile video can play")}
                   />
 
                   {/* Desktop videos */}
                   <div className="hidden lg:flex w-full h-full">
-                    {[assets.rose, assets.famous, assets.galaxy, assets.UL].map((src, index) => (
-                      <video
-                        key={index}
-                        ref={(el) => (videoRefs.current[index] = el)}
-                        className="min-w-[200px] max-w-[300px] mx-2 object-contain mix-blend-screen pointer-events-none animate-float"
-                        src={src}
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                      />
-                    ))}
+                    {videosLoaded === totalVideos ? (
+                      // Videos are ready to display
+                      videoSources.map((src, index) => (
+                        <video
+                          key={index}
+                          className="min-w-[200px] max-w-[300px] mx-2 object-contain mix-blend-screen pointer-events-none animate-float"
+                          src={src}
+                          muted
+                          loop
+                          playsInline
+                          autoPlay
+                        />
+                      ))
+                    ) : (
+                      // Loading state
+                      <>
+                        <div className="w-full h-full flex items-center justify-center">
+                          <p className="text-white text-lg animate-pulse">
+                            Loading visuals... {videosLoaded}/{totalVideos}
+                          </p>
+                        </div>
+                        
+                        {/* Hidden videos that preload content */}
+                        {videoSources.map((src, index) => (
+                          <video
+                            key={index}
+                            className="hidden"
+                            src={src}
+                            muted
+                            preload="auto"
+                            onLoadedData={handleVideoLoaded}
+                            onError={(e) => console.error(`Video ${index} error:`, e)}
+                          />
+                        ))}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
