@@ -19,7 +19,8 @@ import Profile from './pages/Profile'
 import Terms from './pages/Terms'
 import ScrollToTop from "./components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/react"
-import Pattern from './components/pattern'
+import Pattern from './components/Pattern'
+
 
 
 const App = () => {

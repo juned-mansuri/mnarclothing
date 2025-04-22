@@ -6,7 +6,7 @@ import OurPolicy from "../components/OurPolicy";
 import NewsLetterBox from "../components/NewsLetterBox";
 import Dither from "../components/Dither";
 import Glimpse from "../components/Glimpse";
-import Pattern from "../components/pattern";
+import Pattern from "../components/Pattern";
 
 
 const Home = () => {
