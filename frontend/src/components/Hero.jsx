@@ -45,7 +45,7 @@ const Hero = () => {
                         CLOTHING
                       </span>
                     </p>
-                    <p className="w-8 sm:w-12 h-[1px] sm:h-[2px] bg-gray-100 text-4xl"></p>
+                    {/* <p className="w-8 sm:w-12 h-[1px] sm:h-[2px] bg-gray-100 text-4xl"></p> */}
                   </div>
 
                   <p className="text-white mb-6 text-xs sm:text-2xl prata-regular tracking-wider">
