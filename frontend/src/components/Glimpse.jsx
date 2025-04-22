@@ -16,7 +16,8 @@ const Glimpse = () => {
     const fetchGlimpses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:4000/api/glimpses/list");
+        // Use the backendUrl from context instead of hardcoded localhost
+        const response = await axios.get(`${backendUrl}/api/glimpses/list`);
         
         if (response.data.success) {
           setGlimpses(response.data.data || []);
@@ -25,13 +26,15 @@ const Glimpse = () => {
         }
       } catch (error) {
         console.error("Error fetching glimpses:", error);
-        setError("Error fetching glimpses: " + error.message);
+        setError("Error fetching glimpses: " + (error.response?.data?.message || error.message));
       } finally {
         setLoading(false);
       }
     };
 
-    fetchGlimpses();
+    if (backendUrl) {
+      fetchGlimpses();
+    }
   }, []);
 
   // Fallback to default items if no glimpses are available
