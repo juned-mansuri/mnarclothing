@@ -35,7 +35,7 @@ const Glimpse = () => {
     if (backendUrl) {
       fetchGlimpses();
     }
-  }, []);
+  }, [backendUrl]);
 
   // Fallback to default items if no glimpses are available
   const defaultItems = [
