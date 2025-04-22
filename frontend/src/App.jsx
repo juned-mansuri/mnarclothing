@@ -19,16 +19,20 @@ import Profile from './pages/Profile'
 import Terms from './pages/Terms'
 import ScrollToTop from "./components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/react"
+import Pattern from './components/pattern'
 
 
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-[#ffffff]'>
+    
+    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-[#ffffff] '  >
       <Analytics />
       <ToastContainer/>
       <ScrollToTop/>
       <Navbar/>
       <SearchBar/>
+      <Pattern/>
+      
       <Routes>
       <Route path='/' element={< Home />} />
       <Route path='/collection' element={<Collection/>} />

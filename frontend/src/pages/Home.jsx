@@ -6,13 +6,15 @@ import OurPolicy from "../components/OurPolicy";
 import NewsLetterBox from "../components/NewsLetterBox";
 import Dither from "../components/Dither";
 import Glimpse from "../components/Glimpse";
+import Pattern from "../components/pattern";
 
 
 const Home = () => {
   return (
-    <div>
-  <Hero/>
-<Glimpse/>
+    <div className="">
+
+  <Hero className="" />
+<Glimpse className=""/>
       <LatestCollection />
       <BestSeller />
       <OurPolicy />

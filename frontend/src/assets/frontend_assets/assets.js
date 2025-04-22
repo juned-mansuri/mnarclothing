@@ -25,12 +25,18 @@ import whitevid from './white.webm'
 import mnarlogo from './mnar logo.png'
 import mnarlogo2 from './mnar logo 2.png'
 import mnarlogobird from './mnar bird.png'
+import mnarbirdleft from './mnar left wing.svg'
+import mnarbirdright from './mnar right wing.svg'
+
+import mnarlogobirdblack from './mnar bird white bg circle.png'
 import mnarvideo from './mnarvideo.webm'
 import rose from './rose.webm'
 import famous from './famous.webm'
 import galaxy from './galaxy.webm'
 import SW from './SW.webm'
 import UL from './UL.webm'
+import svgbird from './svgbird.svg'
+import glimpse1 from './glimpse1.png'
 
 export const assets = {
     logo,
@@ -64,5 +70,10 @@ export const assets = {
     galaxy,
     SW,
     UL,
+    svgbird,
+    mnarlogobirdblack,
+    mnarbirdright,
+    mnarbirdleft,
+    glimpse1
     
 }

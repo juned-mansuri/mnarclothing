@@ -8,23 +8,23 @@ import InfiniteScroll from "./InfiniteScroll";
 const Glimpse = () => {
   const { navigate } = useContext(ShopContext);
   const items = [
-    { content: "Text Item 1" },
-    { content: <p>Paragraph Item 2</p> },
-    { content: "Text Item 3" },
-    { content: <p>Paragraph Item 4</p> },
-    { content: "Text Item 5" },
-    { content: <p>Paragraph Item 6</p> },
-    { content: "Text Item 7" },
-    { content: <p>Paragraph Item 8</p> },
-    { content: "Text Item 9" },
-    { content: <p>Paragraph Item 10</p> },
-    { content: "Text Item 11" },
-    { content: <p>Paragraph Item 12</p> },
-    { content: "Text Item 13" },
-    { content: <p>Paragraph Item 14</p> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
+    { content: <img className="border-2 border-white rounded-[15px] " src={assets.glimpse1} alt="" /> },
   ];
   return (
-    <div>
+    <div className="w-full h-full bg-white [background-image:radial-gradient(rgba(12,12,12,0.171)_2px,transparent_0)] [background-size:30px_30px] [background-position:-5px_-5px]">
       <div className="w-full sm:w-3/4 md:w-full   relative rounded-[20px] overflow-hidden mt-4 mb-4">
         <div className="w-full flex flex-row md:flex-row items-center justify-center gap-6 md:gap-12 text-center">
           {/* Left Text */}
@@ -71,6 +71,7 @@ const Glimpse = () => {
             autoplaySpeed={1}
             autoplayDirection="down"
             pauseOnHover={true}
+            
           />
         </div>
       </div>
