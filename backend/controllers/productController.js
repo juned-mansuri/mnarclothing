@@ -4,7 +4,7 @@ import productModel from "../models/productModel.js";
 // fn for adding product
 const addProduct = async (req,res) => {
         try {
-                const {name,description,price,category,subCategory,sizes,bestseller} = req.body
+                const {name,description,price,category,subCategory,sizes,bestseller,showcase} = req.body
 
                 const image1 = req.files.image1 && req.files.image1[0]
                 const image2 = req.files.image2 && req.files.image2[0]
@@ -31,6 +31,7 @@ const addProduct = async (req,res) => {
                         price : Number(price),
                         subCategory,
                         bestseller : bestseller === 'true' ? true : false,
+                        showcase : showcase === 'true' ? true : false,
                         sizes : JSON.parse(sizes),
                         images: imagesUrl,
                         date : Date.now()
@@ -96,7 +97,116 @@ const addProduct = async (req,res) => {
             res.json({success: false, message: error.message})
         }
     }
+// In ../controllers/productController.js
+// fn for updating product
+const updateProduct = async (req, res) => {
+    try {
+      const { id, name, description, price, category, subCategory, bestseller, showcase, sizes } = req.body;
+      
+      // Validate required fields
+      if (!id || !name || !category || !price) {
+        return res.json({
+          success: false,
+          message: "Missing required fields"
+        });
+      }
+  
+      // Find the product
+      const product = await productModel.findById(id);
+      
+      if (!product) {
+        return res.json({
+          success: false,
+          message: "Product not found"
+        });
+      }
+      
+      // Handle image uploads if any
+      let imagesUrl = [];
+      
+      // Check if we have new file uploads
+      if (req.files && Object.keys(req.files).length > 0) {
+        const image1 = req.files.image1 && req.files.image1[0];
+        const image2 = req.files.image2 && req.files.image2[0];
+        const image3 = req.files.image3 && req.files.image3[0];
+        const image4 = req.files.image4 && req.files.image4[0];
+        
+        const images = [image1, image2, image3, image4].filter(item => item !== undefined);
+        
+        if (images.length > 0) {
+          // Upload to Cloudinary
+          imagesUrl = await Promise.all(
+            images.map(async (item) => {
+              let result = await cloudinary.uploader.upload(item.path, {resource_type: 'image'});
+              return result.secure_url;
+            })
+          );
+        }
+      }
+      
+      // Check if existing images are provided in the request body
+      if (req.body.images && req.body.images.length > 0) {
+        try {
+          const existingImages = JSON.parse(req.body.images);
+          // If we have both new uploads and existing images, combine them
+          if (imagesUrl.length > 0) {
+            imagesUrl = [...imagesUrl, ...existingImages];
+          } else {
+            // Otherwise just use the existing images
+            imagesUrl = existingImages;
+          }
+        } catch (e) {
+          console.log("Error parsing images", e);
+        }
+      }
+      
+      // Update product data
+      const updatedData = {
+        name,
+        category,
+        price: Number(price),
+      };
+      
+      // Add optional fields if provided
+      if (description) updatedData.description = description;
+      if (subCategory) updatedData.subCategory = subCategory;
+      if (bestseller !== undefined) updatedData.bestseller = bestseller === 'true';
+      if (showcase !== undefined) updatedData.showcase = showcase === 'true';
+      
+      // Handle sizes
+      if (sizes) {
+        try {
+          updatedData.sizes = JSON.parse(sizes);
+        } catch (e) {
+          console.log("Error parsing sizes", e);
+        }
+      }
+      
+      // Only update images if we have new ones or existing ones
+      if (imagesUrl.length > 0) {
+        updatedData.images = imagesUrl;
+      }
+      
+      // Update the product
+      const updatedProduct = await productModel.findByIdAndUpdate(
+        id,
+        updatedData,
+        { new: true } // Return the updated document
+      );
+  
+      return res.json({
+        success: true,
+        message: "Product updated successfully",
+        product: updatedProduct
+      });
+    } catch (error) {
+      console.error(error);
+      return res.json({
+        success: false,
+        message: error.message
+      });
+    }
+  };
 
 
-
-export {listProducts , addProduct, removeProduct, singleProduct}
+export {listProducts , addProduct, removeProduct, singleProduct, updateProduct}

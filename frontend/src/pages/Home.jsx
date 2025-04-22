@@ -7,6 +7,7 @@ import NewsLetterBox from "../components/NewsLetterBox";
 import Dither from "../components/Dither";
 import Glimpse from "../components/Glimpse";
 import Pattern from "../components/Pattern";
+import Showcase from "../components/Showcase";
 
 
 const Home = () => {
@@ -15,8 +16,9 @@ const Home = () => {
 
   <Hero className="" />
 <Glimpse className=""/>
-      <LatestCollection />
-      <BestSeller />
+      {/* <LatestCollection /> */}
+      <Showcase/>
+      {/* <BestSeller /> */}
       <OurPolicy />
       <NewsLetterBox />
     </div>
