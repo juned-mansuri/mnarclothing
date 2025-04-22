@@ -37,9 +37,9 @@ const Hero = () => {
           <div className="w-full flex items-center justify-center py-10 sm:py-0">
             <section>
               <div className="container mx-auto items-center">
-                <div className="text-center absolute -translate-x-1/2 left-1/2 top-1/3 sm:top-1/2 z-50 transform -translate-y-1/2">
+                <div className="text-center absolute -translate-x-1/2 left-1/2 top-1/2 sm:top-1/2 z-50 transform -translate-y-1/2">
                   <div className="inline-flex gap-2 items-center mb-3">
-                    <p className="text-white text-5xl md:text-7xl font-extrabold tracking-widest drop-shadow-lg uppercase">
+                    <p className="text-white text-4xl md:text-7xl font-extrabold tracking-widest drop-shadow-lg uppercase prata-regular">
                       MNAR{" "}
                       <span className="text-white font-medium prata-regular">
                         CLOTHING
