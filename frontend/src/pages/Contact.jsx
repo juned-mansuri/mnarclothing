@@ -12,8 +12,8 @@ const Contact = () => {
 
       <div className="my-10 flex flex-col justify-center md:flex-row gap-10 mb-28">
         <img
-          className="w-full md:max-w-[480px] object-cover rounded-[15px] m-10"
-          src={assets.mnarlogobird}
+          className="h-20 sm:h-60 object-contain  m-10"
+          src={assets.mnarlogo}
           alt=""
         />
         <div className="flex flex-col justify-center items-start gap-6">

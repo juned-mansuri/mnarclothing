@@ -39,6 +39,15 @@ import svgbird from './svgbird.svg'
 import glimpse1 from './glimpse1.png'
 import him from './him.jpg'
 import her from './her.jpg'
+import director1 from './director1.png'
+import mnarhero from './mnarhero.png'
+import director2 from './director2.png'
+import insta from './instagram.png'
+import facebook from './facebook.png'
+import twitter from './twitter.png'
+import linkedin from './linkedin.png'
+import youtube from './youtube.png'
+import github from './github.png'
 
 export const assets = {
     logo,
@@ -78,6 +87,16 @@ export const assets = {
     mnarbirdleft,
     glimpse1,
     him,
-    her
+    her,
+    mnarhero,
+    director1, 
+    director2,
+    insta,
+    facebook,
+    twitter,
+    linkedin,
+    youtube,
+    github,
+    
     
 }

@@ -1,44 +1,130 @@
 import React from 'react';
-import Title from '../components/Title';
 import { assets } from '../assets/frontend_assets/assets';
 import NewsLetterBox from '../components/NewsLetterBox';
 
 const About = () => {
   return (
-    <div>
-        <div className=' text-2xl text-center p-8 border-t'>
-          <Title text1={'ABOUT'} text2={'US'} />
-        </div>
+    <div className='text-gray-800'>
+      {/* Top Section */}
+      <div className='border-t text-center py-12 px-4'>
+        <h1 className='text-4xl md:text-5xl font-bold'>MNAR CLOTHING</h1>
+        <p className='max-w-xl mx-auto mt-4 text-sm text-gray-600'>
+          We work across fashion and identity. We design bold, expressive clothing that empowers individuals to embrace their uniqueness. Our vision merges confidence, quality, and creativity.
+        </p>
+        <div>
+      <span className='text-center flex gap-2 mt-4 me-0 justify-center'>
+      
+        <a target='_blank' href="https://www.facebook.com/share/18zRviwmeC/">
+        <img className='w-10' src={assets.facebook} alt="" />
+        </a>
+        <a target='_blank' href="https://x.com/MNARclothing?t=bNkc641syFYWBGKQ0je1TQ&s=09">
+        <img className='w-10' src={assets.twitter} alt="" />
+        </a>
+        <a target='_blank' href="https://www.instagram.com/mnar.india?igsh=eWlzandjZmJtdDZ2">
+        <img className='w-10' src={assets.insta} alt="" />
+        </a>
+        <a target='_blank' href="https://youtube.com/@devsangtani24?si=JhBLYHaYKkI9-vPL">
+        <img className='w-10' src={assets.youtube} alt="" />
+        </a>
+        
+       
+        
+        </span>
+      </div>
+      </div>
 
-        <div className=' my-10 flex flex-col md:flex-row gap-16'>
-          <img className=' w-full md:max-w-[450px]' src={assets.mnarlogo2} alt="" />
-          <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
-          <p>Mnar Clothing is more than just a clothing brand—it's a celebration of individuality and self-expression. Each piece in our collection is thoughtfully designed to combine elegance, comfort, and versatility. We believe in empowering everyone to wear their confidence and embrace their unique style.</p>
-          <p>From timeless classics to bold statement pieces, our designs are crafted with meticulous attention to detail and premium quality fabrics, ensuring you look and feel your best every day.</p>
-            <b className='text-gray-800'>Our Mission</b>
-            <p>At Mnar Clothing, our mission is to redefine fashion by blending contemporary trends with timeless craftsmanship. We aim to create clothing that inspires confidence, sparks creativity, and resonates with people from all walks of life.</p>
-          </div>
+      {/* Hero Image */}
+      <div className='w-full'>
+        <img src={assets.mnarhero} alt="MNAR Hero" className='w-full h-96 object-cover' />
+      </div>
 
-        </div>
-        <div className='text-xl py-4'>
-          <Title text1={'WHY'} text2={'CHOOSE US '} />
+      {/* Bio Text */}
+    
+      <div className='text-sm text-center max-w-3xl mx-auto mt-6 px-4 text-gray-600'>
+      Mnar Clothing started with a shared love for good design and quality craftsmanship. With a small, passionate team, we've grown steadily — now offering a wide range of unique collections, proudly delivering across India.
+      </div>
 
-        </div>
-        <div className='flex flex-col md:flex-row text-sm mb-20'>
-            <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-              <b>Quality Assurance:</b>
-              <p className=' text-gray-600'>At Mnar Clothing, we prioritize quality in every garment we create. Our clothes are made with premium materials that ensure durability, comfort, and long-lasting wear. Each piece undergoes rigorous quality checks, so you can trust that you're getting only the best.</p>
-              </div>
-            <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-              <b>Convenience</b>
-              <p className=' text-gray-600'>Shopping with us is seamless and easy. We offer fast shipping, secure payment options, and hassle-free returns, ensuring that your shopping experience is as smooth as possible. We believe in making fashion accessible, no matter where you are.</p>
-              </div>
-            <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-              <b>Exceptional Customer Support</b>
-              <p className=' text-gray-600'>Our team is always ready to assist you. Whether you have a question about sizing, need help with your order, or simply want style advice, we're here for you. We pride ourselves on offering personalized, responsive, and friendly customer service to ensure your satisfaction every step of the way.</p>
-              </div>
-        </div>
-        <NewsLetterBox/>
+      {/* Meet the Team Section */}
+      <div className="mt-20 text-center">
+  <h2 className="text-3xl md:text-4xl font-light tracking-wide">
+    MEET THE <span className="font-bold">DEVELOPERS</span>
+  </h2>
+
+  <div className="flex flex-col md:flex-row justify-center items-center gap-10 mt-16 px-4">
+    {/* Text Left - Juned */}
+    <div className="max-w-sm text-right">
+    <p className="text-xl text-gray-500">Lead Developer</p>
+      <h3 className="text-3xl font-semibold mt-1">Juned Mansuri</h3>
+      <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+      
+      Juned Mansuri is a developer at Mnar Clothing, contributing to the technical development of the platform. His work supports the brand’s digital growth and enhances user experience.
+      </p>
+      <span className='text-end flex gap-2 mt-10 me-0 justify-end'>
+        <a target='_blank' href="https://www.instagram.com/thejumicreates/">
+        <img className='w-10' src={assets.insta} alt="" />
+        </a>
+        <a target='_blank' href="https://x.com/bytesizedjuned">
+        <img className='w-10' src={assets.twitter} alt="" />
+        </a>
+        <a target='_blank' href="https://www.linkedin.com/in/juned-mansuri-bb9b7923b/">
+        <img className='w-10' src={assets.linkedin} alt="" />
+        </a>
+        <a target='_blank' href="https://github.com/juned-mansuri">
+        <img className='w-10' src={assets.github} alt="" />
+        </a>
+        </span>
+     
+    </div>
+
+    {/* Image 1 - Juned */}
+    <img
+      src={assets.director1}
+      alt="Juned Mansuri"
+      className="w-72  h-auto object-cover "
+    />
+
+    {/* Image 2 - Jenam */}
+    <img
+      src={assets.director2}
+      alt="Jenam Jain"
+      className="w-72 h-auto object-cover "
+    />
+
+    {/* Text Right - Jenam */}
+    <div className="max-w-sm text-left">
+    <p className="text-xl text-gray-500 ">Technical Contributor</p>
+      <h3 className="text-3xl font-semibold mt-1 ">Jenam Jain</h3>
+      <p className="mt-2 text-sm text-gray-600 leading-relaxed ">
+      Jenam Jain is a developer at Mnar Clothing, focusing on backend systems and infrastructure. He ensures performance, stability, and reliability across all technical operations.
+      </p>
+      <span className='text-end flex gap-2 mt-10 me-0 justify-start'>
+      <a target='_blank' href="">
+        <img className='w-10' src={assets.github} alt="" />
+        </a>
+        <a target='_blank' href="">
+        <img className='w-10' src={assets.linkedin} alt="" />
+        </a>
+        <a target='_blank' href="">
+        <img className='w-10' src={assets.twitter} alt="" />
+        </a>
+        <a target='_blank' href="">
+        <img className='w-10' src={assets.insta} alt="" />
+        </a>
+        
+       
+        
+        </span>
+    </div>
+  </div>
+</div>
+
+
+      {/* Optional: CTA or Newsletter */}
+      <div className='mt-20 mb-12'>
+        {/* You can include <NewsLetterBox /> here if needed */}
+        <NewsLetterBox />
+        
+      </div>
     </div>
   );
 };
