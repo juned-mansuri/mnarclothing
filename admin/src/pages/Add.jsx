@@ -18,6 +18,7 @@ const Add = ({token}) => {
   const [subCategory, setSubCategory] = useState('Topwear')
   const [bestseller, setBestseller] = useState(false)
   const [showcase, setShowcase] = useState(false)
+  const [mystery, setMystery] = useState(false)
 
   // Stock management with size
   const [sizes, setSizes] = useState([])
@@ -55,6 +56,7 @@ const Add = ({token}) => {
       formData.append("subCategory", subCategory)
       formData.append("bestseller", bestseller)
       formData.append("showcase", showcase)
+      formData.append("mystery", mystery)
       formData.append("sizes", JSON.stringify(sizes))
       formData.append("stock", JSON.stringify(stockData))
       
@@ -151,6 +153,7 @@ const Add = ({token}) => {
             <option value="Topwear">Topwear</option>
             <option value="Bottomwear">Bottomwear</option>
             <option value="Winterwear">Winterwear</option>
+            <option value="gymtees">Gym Polyester tees</option>
           </select>
         </div>
 
@@ -208,6 +211,10 @@ const Add = ({token}) => {
       <div className="flex gap-2 mt-2">
         <input onChange={()=> setShowcase(prev => !prev)} checked={showcase} type="checkbox" id="showcase" />
         <label className="cursor-pointer" htmlFor="showcase">Add To Showcase</label>
+      </div>
+      <div className="flex gap-2 mt-2">
+        <input onChange={()=> setMystery(prev => !prev)} checked={mystery} type="checkbox" id="mystery" />
+        <label className="cursor-pointer" htmlFor="mystery">Add To Mystery Box</label>
       </div>
 
       <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">ADD</button>

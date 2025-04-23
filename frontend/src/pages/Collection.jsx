@@ -155,6 +155,10 @@ sortProduct();
               <input value={"Winterwear"}   type="checkbox" className="w-3" onChange={toggleSubCategory} />
               Winterwear
             </p>
+            <p className="flex gap-2">
+              <input value={"gymtees"}   type="checkbox" className="w-3" onChange={toggleSubCategory} />
+              Gym Polyester Tees
+            </p>
           </div>
         </div>
       </div>

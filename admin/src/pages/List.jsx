@@ -22,6 +22,7 @@ const List = ({ token }) => {
   const [subCategory, setSubCategory] = useState("Topwear");
   const [bestseller, setBestseller] = useState(false);
   const [showcase, setShowcase] = useState(false);
+  const [mystery, setMystery] = useState(false);
   const [sizes, setSizes] = useState([]);
   const [stockValues, setStockValues] = useState({
     S: 0,
@@ -82,6 +83,7 @@ const List = ({ token }) => {
     setSubCategory(item.subCategory);
     setBestseller(item.bestseller || false);
     setShowcase(item.showcase || false);
+    setMystery(item.mystery || false);
     setSizes(item.sizes || []);
     setExistingImages(item.images || []);
     
@@ -120,6 +122,7 @@ const List = ({ token }) => {
     setSubCategory("Topwear");
     setBestseller(false);
     setShowcase(false);
+    setMystery(false);
     setSizes([]);
     setExistingImages([]);
     setImage1(false);
@@ -154,6 +157,7 @@ const List = ({ token }) => {
       formData.append("subCategory", subCategory);
       formData.append("bestseller", bestseller);
       formData.append("showcase", showcase);
+      formData.append("mystery",mystery);
       formData.append("sizes", JSON.stringify(sizes));
       formData.append("stock", JSON.stringify(stockData));
       
@@ -339,6 +343,7 @@ const List = ({ token }) => {
                   <option value="Men">Men</option>
                   <option value="Women">Women</option>
                   <option value="Kids">Kids</option>
+                  
                 </select>
               </div>
               <div className="flex-1">
@@ -351,6 +356,7 @@ const List = ({ token }) => {
                   <option value="Topwear">Topwear</option>
                   <option value="Bottomwear">Bottomwear</option>
                   <option value="Winterwear">Winterwear</option>
+                  <option value="gymtees">Gym Polyester tees</option>
                 </select>
               </div>
               <div className="flex-1">
@@ -430,6 +436,14 @@ const List = ({ token }) => {
                 onChange={() => setShowcase((prev) => !prev)}
               />
               Add to Showcase
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={mystery}
+                onChange={() => setMystery((prev) => !prev)}
+              />
+              Add to Mystery box
             </label>
           </div>
     
