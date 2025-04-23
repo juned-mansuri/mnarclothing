@@ -5,6 +5,7 @@ import { assets } from "../assets/frontend_assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import { useSwipeable } from "react-swipeable";
 import Modal from "react-modal";
+import BestSeller from "../components/BestSeller";
 
 Modal.setAppElement("#root"); // for accessibility
 
@@ -58,9 +59,9 @@ const Product = () => {
       {/* Product Section */}
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
         {/* Images */}
-        <div className="flex-1 flex flex-col-reverse sm:flex-row gap-3">
+        <div className="flex-1 flex flex-col-reverse sm:flex-row gap-3 ">
           {/* Thumbnails */}
-          <div className="w-full sm:w-[18.7%] flex sm:flex-col flex-row overflow-x-auto sm:overflow-y-auto gap-2 sm:gap-3 pr-2 sm:pr-0">
+          <div className="w-full sm:w-[18.7%] flex sm:flex-col flex-row overflow-x-auto sm:overflow-y-auto gap-2 sm:gap-3 pr-2 sm:pr-0 ">
             {productData.images.map((item, index) => (
               <img
                 src={item}
@@ -79,7 +80,7 @@ const Product = () => {
 
           {/* Main image with zoom/switch */}
           <div
-            className="relative w-full sm:w-[80%] h-[500px] bg-white flex items-center justify-center"
+            className="relative w-full sm:w-[80%] h-[500px] bg-white flex items-center justify-center "
             {...swipeHandlers}
           >
             <img
@@ -252,10 +253,13 @@ const Product = () => {
       </div>
 
       {/* Related Products */}
+     
       <RelatedProducts
         category={productData.category}
         subCategory={productData.subCategory}
       />
+       {/* Best Seller */}
+       <BestSeller/>
     </div>
   ) : (
     <div className="opacity-0"></div>

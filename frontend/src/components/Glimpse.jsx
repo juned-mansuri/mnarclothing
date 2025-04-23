@@ -5,9 +5,10 @@ import CountUp from "./CountUp";
 import SpotlightCard from "./SpotlightCard";
 import InfiniteScroll from "./InfiniteScroll";
 import axios from "axios";
+import Squares from "./Squares";
 
 const Glimpse = () => {
-  const { navigate , backendUrl } = useContext(ShopContext);
+  const { navigate, backendUrl } = useContext(ShopContext);
   const [glimpses, setGlimpses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,7 +48,7 @@ const Glimpse = () => {
   const glimpseItems = glimpses.map((glimpse) => ({
     content: (
       <img 
-        className="border-2 border-white rounded-[15px]" 
+        className="border-2 border-black rounded-[15px]" 
         src={glimpse.image} 
         alt="Glimpse" 
         key={glimpse._id}
@@ -112,17 +113,33 @@ const Glimpse = () => {
             style={{ height: "500px", position: "relative" }}
             className="relative rounded-3xl border border-neutral-800 bg-black mt-0 overflow-hidden text-white"
           >
-            <div className="absolute top-0 left-0 w-full h-1/4 bg-gradient-to-b from-black to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
-            <InfiniteScroll
-              items={items}
-              isTilted={true}
-              tiltDirection="left"
-              autoplay={true}
-              autoplaySpeed={1}
-              autoplayDirection="down"
-              pauseOnHover={true}
-            />
+            {/* Background Squares - POSITIONED WITH LOWER Z-INDEX */}
+            <div className="absolute inset-0 z-0">
+              <Squares 
+                speed={0.5} 
+                squareSize={40}
+                direction='diagonal' 
+                borderColor='#fff'
+                hoverFillColor='#222'
+              />
+            </div>
+            
+            {/* InfiniteScroll - POSITIONED WITH HIGHER Z-INDEX */}
+            <div className="relative z-20 w-full h-full">
+              <InfiniteScroll
+                items={items}
+                isTilted={true}
+                tiltDirection="left"
+                autoplay={true}
+                autoplaySpeed={1}
+                autoplayDirection="down"
+                pauseOnHover={true}
+              />
+            </div>
+            
+            {/* Gradient Overlays */}
+            <div className="absolute top-0 left-0 w-full h-1/4 bg-gradient-to-b from-black to-transparent z-30 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black to-transparent z-30 pointer-events-none"></div>
           </div>
         </div>
       )}
@@ -130,4 +147,4 @@ const Glimpse = () => {
   );
 };
 
-export default Glimpse; 
+export default Glimpse;

@@ -22,7 +22,7 @@ const BestSeller = () => {
 
             <Title text1={'BEST'} text2={'SELLERS'}/>
             <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
-            "Shop our top-selling products before they’re gone! These bestsellers are flying off the shelves."
+            &#34;Grab our hottest picks while they last! These customer favorites are selling fast.`&#34;`
 
             </p>
         </div>

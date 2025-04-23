@@ -25,7 +25,7 @@ const Showcase = () => {
 
             <Title text1={'CREATOR\'S'} text2={'PICKS'}/>
             <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
-            "Shop our Creator's Picks products before they’re gone! These Creator's Picks are flying off the shelves."
+            &#34;Shop our Creator&#39;s Picks products before they’re gone! These Creator&#39;s Picks are flying off the shelves.&#34;
 
             </p>
         </div>

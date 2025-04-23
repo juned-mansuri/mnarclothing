@@ -8,16 +8,16 @@ import Dither from "../components/Dither";
 import Glimpse from "../components/Glimpse";
 import Pattern from "../components/Pattern";
 import Showcase from "../components/Showcase";
-
+import GenderCategories from "../components/GenderCategories";
 
 const Home = () => {
   return (
     <div className="">
-
-  <Hero className="" />
-<Glimpse className=""/>
+      <Hero className="" />
+      <Glimpse className="" />
       {/* <LatestCollection /> */}
-      <Showcase/>
+      <GenderCategories/>
+      <Showcase />
       {/* <BestSeller /> */}
       <OurPolicy />
       <NewsLetterBox />

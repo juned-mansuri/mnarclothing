@@ -31,7 +31,7 @@ const Hero = () => {
 
   return (
     <div className="w-full h-[50vh] relative rounded-2xl overflow-hidden">
-      <LiquidChrome baseColor={[0.1, 0.1, 0.1]} speed={0.3} amplitude={0.4} interactive={true} />
+      <LiquidChrome baseColor={[0.1, 0.1, 0.1]} speed={0.3} amplitude={0.4} interactive={false} />
       <div className="absolute top-0 left-0 z-[1] w-full">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-8 px-4 sm:px-8 py-8">
           <div className="w-full flex items-center justify-center py-10 sm:py-0">

@@ -20,6 +20,8 @@ import Terms from './pages/Terms'
 import ScrollToTop from "./components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/react"
 import Pattern from './components/Pattern'
+import MenCollection from './components/MenCollection'
+import WomenCollection from './components/WomenCollection'
 
 
 
@@ -36,6 +38,9 @@ const App = () => {
       
       <Routes>
       <Route path='/' element={< Home />} />
+      <Route path="/men-collection" element={<MenCollection />} />
+      <Route path="/women-collection" element={<WomenCollection />} />
+    
       <Route path='/collection' element={<Collection/>} />
       <Route path='/about' element={< About />} />
       <Route path='/contact' element={< Contact />} />

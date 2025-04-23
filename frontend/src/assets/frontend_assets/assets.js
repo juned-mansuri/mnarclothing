@@ -37,6 +37,8 @@ import SW from './SW.webm'
 import UL from './UL.webm'
 import svgbird from './svgbird.svg'
 import glimpse1 from './glimpse1.png'
+import him from './him.jpg'
+import her from './her.jpg'
 
 export const assets = {
     logo,
@@ -74,6 +76,8 @@ export const assets = {
     mnarlogobirdblack,
     mnarbirdright,
     mnarbirdleft,
-    glimpse1
+    glimpse1,
+    him,
+    her
     
 }

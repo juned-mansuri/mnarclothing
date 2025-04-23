@@ -12,7 +12,7 @@ const Contact = () => {
 
       <div className="my-10 flex flex-col justify-center md:flex-row gap-10 mb-28">
         <img
-          className="w-full md:max-w-[480px]"
+          className="w-full md:max-w-[480px] object-cover rounded-[15px] m-10"
           src={assets.mnarlogobird}
           alt=""
         />
