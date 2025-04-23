@@ -30,7 +30,7 @@ import mnarbirdright from './mnar right wing.svg'
 
 import mnarlogobirdblack from './mnar bird white bg circle.png'
 // import mnarvideo from './mnarvideo.webm'
-// import rose from './rose.webm'
+import rose from './Rose.webm'
 import famous from './famous.webm'
 import galaxy from './galaxy.webm'
 // import SW from './SW.webm'
@@ -76,7 +76,7 @@ export const assets = {
     mnarlogo2,
     mnarlogobird,
     // mnarvideo,
-    // rose,
+    rose,
     famous,
     galaxy,
     // SW,
