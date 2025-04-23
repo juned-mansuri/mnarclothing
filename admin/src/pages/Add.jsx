@@ -19,28 +19,51 @@ const Add = ({token}) => {
   const [bestseller, setBestseller] = useState(false)
   const [showcase, setShowcase] = useState(false)
 
-  
+  // Stock management with size
   const [sizes, setSizes] = useState([])
+  const [stockValues, setStockValues] = useState({
+    S: 0,
+    M: 0,
+    L: 0,
+    XL: 0,
+    XXL: 0
+  })
+
+  // Handle stock value changes
+  const handleStockChange = (size, value) => {
+    setStockValues(prev => ({
+      ...prev,
+      [size]: parseInt(value) || 0
+    }));
+  }
+  
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
     try {
-      const formData = new FormData();
-      formData.append("name",name)
-      formData.append("description",description)
-      formData.append("price",price)
-      formData.append("category",category)
-      formData.append("subCategory",subCategory)
-      formData.append("bestseller",bestseller)
-      formData.append("showcase",showcase)
-      formData.append("sizes",JSON.stringify(sizes))
-      
-     image1 && formData.append("image1",image1)
-     image2 && formData.append("image2",image2)
-     image3 && formData.append("image3",image3)
-     image4 && formData.append("image4",image4)
+      // Create stock object with selected sizes
+      const stockData = {};
+      sizes.forEach(size => {
+        stockData[size] = stockValues[size];
+      });
 
-     const Response = await axios.post(backendUrl + "/api/product/add" , formData , {headers:{token}})
+      const formData = new FormData();
+      formData.append("name", name)
+      formData.append("description", description)
+      formData.append("price", price)
+      formData.append("category", category)
+      formData.append("subCategory", subCategory)
+      formData.append("bestseller", bestseller)
+      formData.append("showcase", showcase)
+      formData.append("sizes", JSON.stringify(sizes))
+      formData.append("stock", JSON.stringify(stockData))
+      
+      image1 && formData.append("image1", image1)
+      image2 && formData.append("image2", image2)
+      image3 && formData.append("image3", image3)
+      image4 && formData.append("image4", image4)
+
+      const Response = await axios.post(backendUrl + "/api/product/add", formData, {headers:{token}})
       if (Response.data.success) {
         toast.success(Response.data.message)
         setName("")
@@ -50,7 +73,13 @@ const Add = ({token}) => {
         setImage3(false)
         setImage4(false)
         setPrice('')
-        
+        setStockValues({
+          S: 0,
+          M: 0,
+          L: 0,
+          XL: 0,
+          XXL: 0
+        })
       }
       else{
         toast.error(Response.data.message)
@@ -59,17 +88,13 @@ const Add = ({token}) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message)
-      
-      
     }
-    
   }
-
 
   return (
     <form onSubmit={onSubmitHandler} className="flex flex-col w-full items-start gap-3">
       <div>
-        <p className=" mb-2">Upload Image</p>
+        <p className="mb-2">Upload Image</p>
         <div className="flex gap-2">
           <label htmlFor="image1">
             <img className="w-20 cursor-pointer" src={!image1 ? assets.upload_area : URL.createObjectURL(image1)} alt="" />
@@ -89,8 +114,8 @@ const Add = ({token}) => {
           </label>
         </div>
       </div>
-      <div className=" w-full">
-        <p className=" mb-2">Product name</p>
+      <div className="w-full">
+        <p className="mb-2">Product name</p>
         <input
           onChange={(e)=>setName(e.target.value)}
           value={name}
@@ -100,8 +125,8 @@ const Add = ({token}) => {
           required
         />
       </div>
-      <div className=" w-full">
-        <p className=" mb-2">Product description</p>
+      <div className="w-full">
+        <p className="mb-2">Product description</p>
         <textarea
           onChange={(e)=>setDescription(e.target.value)}
           value={description}
@@ -113,15 +138,15 @@ const Add = ({token}) => {
       </div>
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
         <div>
-          <p className=" mb-2">Product category</p>
-          <select onChange={(e)=>setCategory(e.target.value)}  className="w-full px-3 py-2">
+          <p className="mb-2">Product category</p>
+          <select onChange={(e)=>setCategory(e.target.value)} className="w-full px-3 py-2">
             <option value="Men">Men</option>
             <option value="Women">Women</option>
             <option value="Kids">Kids</option>
           </select>
         </div>
         <div>
-          <p className=" mb-2">Sub category</p>
+          <p className="mb-2">Sub category</p>
           <select onChange={(e)=> setSubCategory(e.target.value)} className="w-full px-3 py-2">
             <option value="Topwear">Topwear</option>
             <option value="Bottomwear">Bottomwear</option>
@@ -130,13 +155,13 @@ const Add = ({token}) => {
         </div>
 
         <div>
-          <p className=" mb-2" >Product Price</p>
-          <input onChange={(e)=> setPrice(e.target.value)} value={price } className=" w-full px-3 py-2 sm:w-[120px]" type="Number" placeholder="₹299" />
+          <p className="mb-2">Product Price</p>
+          <input onChange={(e)=> setPrice(e.target.value)} value={price} className="w-full px-3 py-2 sm:w-[120px]" type="Number" placeholder="₹299" />
         </div>
       </div>
 
       <div>
-        <p className=" mb-2">Product Sizes</p>
+        <p className="mb-2">Product Sizes</p>
         <div className="flex gap-3">
           <div onClick={()=> setSizes(prev => prev.includes("S") ? prev.filter(item => item !== "S") : [...prev,"S"])}>
             <p className={` ${sizes.includes("S") ? 'bg-[#6f00ff]' : 'bg-slate-200'} px-3 py-1 cursor-pointer `}>S</p>
@@ -155,19 +180,37 @@ const Add = ({token}) => {
           </div>
         </div>
       </div>
-
+      
+      {/* Stock Management Section */}
+      <div className="w-full mt-4">
+        <p className="mb-2 font-medium">Stock Management</p>
+        <div className="flex flex-wrap gap-4">
+          {sizes.map(size => (
+            <div key={size} className="flex items-center gap-2">
+              <p className="text-sm font-medium">{size}:</p>
+              <input
+                type="number"
+                min="0"
+                value={stockValues[size]}
+                onChange={(e) => handleStockChange(size, e.target.value)}
+                className="border border-gray-300 rounded w-20 px-2 py-1"
+                placeholder="0"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="flex gap-2 mt-2">
         <input onChange={()=> setBestseller(prev => !prev)} checked={bestseller} type="checkbox" id="bestseller" />
-        <label className=" cursor-pointer" htmlFor="bestseller">Add To bestseller</label>
+        <label className="cursor-pointer" htmlFor="bestseller">Add To bestseller</label>
       </div>
       <div className="flex gap-2 mt-2">
         <input onChange={()=> setShowcase(prev => !prev)} checked={showcase} type="checkbox" id="showcase" />
-        <label className=" cursor-pointer" htmlFor="showcase">Add To Showcase</label>
+        <label className="cursor-pointer" htmlFor="showcase">Add To Showcase</label>
       </div>
 
-      <button type="submit" className=" w-28 py-3 mt-4 bg-black text-white">ADD</button>
-
+      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">ADD</button>
     </form>
   );
 };

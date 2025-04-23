@@ -1,3 +1,4 @@
+// Update in Product.jsx 
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
@@ -6,19 +7,20 @@ import RelatedProducts from "../components/RelatedProducts";
 import { useSwipeable } from "react-swipeable";
 import Modal from "react-modal";
 import BestSeller from "../components/BestSeller";
+import { toast } from "react-toastify";
 
 Modal.setAppElement("#root"); // for accessibility
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart } = useContext(ShopContext);
+  const { products, currency, addToCart, navigate } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
-  // const [zoom, setZoom] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [selectedSizeStock, setSelectedSizeStock] = useState(0);
 
   const fetchProductData = async () => {
     products.map((item) => {
@@ -29,6 +31,51 @@ const Product = () => {
       }
     });
   };
+
+  // Update selected size stock when size changes
+  useEffect(() => {
+    if (productData && size) {
+      // Get stock for selected size
+      const stockCount = productData.stock && productData.stock[size] ? productData.stock[size] : 0;
+      setSelectedSizeStock(stockCount);
+    }
+  }, [size, productData]);
+
+  // Handle Buy Now function
+  const handleBuyNow = () => {
+    if (!size) {
+      toast.error("Select Product Size");
+      return;
+    }
+
+    // Check if item is in stock
+    if (selectedSizeStock <= 0) {
+      toast.error("Selected size is out of stock");
+      return;
+    }
+    
+    // Add to cart first (reusing existing functionality)
+    addToCart(productData._id, size);
+    
+    // Navigate directly to checkout/place-order page
+    navigate("/place-order");
+  };
+
+  const handleAddToCart = () => {
+    if (!size) {
+      toast.error("Select Product Size");
+      return;
+    }
+
+    // Check if item is in stock
+    if (selectedSizeStock <= 0) {
+      toast.error("Selected size is out of stock");
+      return;
+    }
+
+    addToCart(productData._id, size);
+  };
+
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % productData.images.length;
     setCurrentIndex(nextIndex);
@@ -89,22 +136,14 @@ const Product = () => {
               className={`max-h-full max-w-full object-contain transition-transform duration-300 cursor-zoom-in `}
               onClick={() => setModalOpen(true)}
             />
-            {/* <img
-              src={image}
-              alt="selected"
-              className="w-full h-auto object-contain cursor-zoom-in"
-              onClick={() => setModalOpen(true)}
-            /> */}
             <button
               onClick={handlePrev}
-              // disabled={currentIndex === 0}
               className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-70 px-2 py-1 rounded shadow"
             >
               ◀
             </button>
             <button
               onClick={handleNext}
-              // disabled={currentIndex === productData.images.length - 1}
               className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white bg-opacity-70 px-2 py-1 rounded shadow"
             >
               ▶
@@ -120,12 +159,12 @@ const Product = () => {
               <img key={i} src={assets.star_icon} alt="" className="w-3.5" />
             ))}
             <img src={assets.star_dull_icon} alt="" className="w-3.5" />
-            {/* <p className="pl-2">122</p> */}
           </div>
           <p className="mt-5 text-3xl font-medium">
             {currency}
             {productData.price}
           </p>
+          
           {/* Expandable Description */}
           <div className="relative mt-5 text-gray-500 md:w-4/5">
             <div
@@ -155,25 +194,63 @@ const Product = () => {
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>
             <div className="flex gap-2">
-              {productData.sizes.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSize(item)}
-                  className={`border py-2 px-4 bg-gray-100 ${
-                    item === size ? "border-orange-500" : ""
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
+              {productData.sizes.map((item, index) => {
+                // Check if this size has stock
+                const sizeStock = productData.stock && productData.stock[item] ? productData.stock[item] : 0;
+                const isOutOfStock = sizeStock <= 0;
+                
+                return (
+                  <div key={index} className="relative">
+                    <button
+                      onClick={() => !isOutOfStock && setSize(item)}
+                      className={`border py-2 px-4 bg-gray-100 ${
+                        item === size ? "border-orange-500" : ""
+                      } ${isOutOfStock ? "opacity-50 cursor-not-allowed" : ""}`}
+                      disabled={isOutOfStock}
+                    >
+                      {item}
+                    </button>
+                    {isOutOfStock && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="absolute inset-0 border-t border-red-500 transform rotate-45"></div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
+            
+            {/* Stock Display */}
+            {size && (
+              <div className="mt-2">
+                <p className={`text-sm ${selectedSizeStock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {selectedSizeStock > 0 
+                    ? `In Stock: ${selectedSizeStock} items` 
+                    : 'Out of Stock'}
+                </p>
+              </div>
+            )}
           </div>
-          <button
-            onClick={() => addToCart(productData._id, size)}
-            className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
-          >
-            ADD TO CART
-          </button>
+          
+          {/* Action Buttons - ADD TO CART & BUY NOW */}
+          <div className="flex gap-4">
+            <button
+              onClick={handleAddToCart}
+              className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
+              disabled={!size || selectedSizeStock <= 0}
+            >
+              ADD TO CART
+            </button>
+            
+            <button
+              onClick={handleBuyNow}
+              className="bg-orange-500 text-white px-8 py-3 text-sm active:bg-orange-600"
+              disabled={!size || selectedSizeStock <= 0}
+            >
+              BUY NOW
+            </button>
+          </div>
+          
           <hr className="mt-8 sm:w-4/5" />
           <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
             <p>100% Original product.</p>
@@ -204,14 +281,12 @@ const Product = () => {
           </button>
           <button
             onClick={handlePrev}
-            // disabled={currentIndex === 0}
             className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-70 px-2 py-1 rounded shadow"
           >
             ◀
           </button>
           <button
             onClick={handleNext}
-            // disabled={currentIndex === productData.images.length - 1}
             className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-70 px-2 py-1 rounded shadow"
           >
             ▶
@@ -223,7 +298,6 @@ const Product = () => {
       <div className="mt-20">
         <div className="flex">
           <b className="border px-5 py-3 text-sm">Description</b>
-          {/* <p className="border px-5 py-3 text-sm">Reviews (122)</p> */}
         </div>
         {/* Expandable Description */}
         <div className="relative mt-5 text-gray-500 md:w-4/5">
@@ -253,13 +327,12 @@ const Product = () => {
       </div>
 
       {/* Related Products */}
-     
       <RelatedProducts
         category={productData.category}
         subCategory={productData.subCategory}
       />
-       {/* Best Seller */}
-       <BestSeller/>
+      {/* Best Seller */}
+      <BestSeller/>
     </div>
   ) : (
     <div className="opacity-0"></div>

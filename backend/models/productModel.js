@@ -1,3 +1,4 @@
+// productModel.js
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
@@ -29,6 +30,12 @@ const productSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
+    // Add stock management with stock per size
+    stock: {
+        type: Map,
+        of: Number,
+        default: {}
+    },
     bestseller: {
         type: Boolean
     },
@@ -41,8 +48,6 @@ const productSchema = new mongoose.Schema({
     }
 })
 
-
-const productModel = mongoose.models.product || mongoose.model('Product',productSchema);
-
+const productModel = mongoose.models.product || mongoose.model('Product', productSchema);
 
 export default productModel;

@@ -39,17 +39,15 @@ const PlaceOrder = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-
   // At the top of your component, add this useEffect to load the script
-useEffect(() => {
-  const script = document.createElement('script');
-  script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-  script.async = true;
-  document.body.appendChild(script);
-}, []);
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
-
-  const initPay = (order) => {
+  const initPay = (order,orderData) => {
     console.log("Initializing payment with order:", order);
 
     if (!window.Razorpay) {
@@ -68,63 +66,70 @@ useEffect(() => {
       prefill: {
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
-        contact: formData.phone
+        contact: formData.phone,
       },
       notes: {
-        address: `${formData.street}, ${formData.city}, ${formData.state}`
+        address: `${formData.street}, ${formData.city}, ${formData.state}`,
       },
       theme: {
-        color: '#3399cc'
+        color: "#3399cc",
       },
-      handler: async (response) => {
-        console.log("Payment successful", response);
+     // In PlaceOrder.jsx - Updated handler function
 
-        try {
-          
-          const { data } = await axios.post(
-            backendUrl + "/api/order/verifyRazorpay",
-            response, 
-            { headers: { token } }
-          );
-          if (data.success) {
-            toast.success("Payment successful!");
-            navigate("/orders");
-            setCartItems({});
-          }
-          else{
-            toast.error(data.message || "Payment verification failed");
-          }
-        } catch (error) {
-          console.log("Verification error:", error);
-          toast.error(error.message || "Payment verification failed");
-        }
-      },
-       // Add this to handle user-canceled payments
-    modal: {
-      ondismiss: function() {
-        console.log("Payment dismissed");
-        toast.error("Payment canceled by user");
-      }
-    }
-    };
-    
-    console.log("Razorpay options:", options);
+handler: async (response) => {
+  console.log("Payment successful", response);
 
-
-      // Create Razorpay instance and open checkout
   try {
-    const rzp = new window.Razorpay(options);
+    // Get the user ID from the JWT token
+    const userId = JSON.parse(atob(token.split('.')[1])).id;
     
-    rzp.on('payment.failed', function(response) {
-      console.error("Payment failed:", response.error);
-      toast.error(response.error.description || "Payment failed");
-    });
-    
-    rzp.open();
+    const { data } = await axios.post(
+      backendUrl + "/api/order/verifyRazorpay",
+      {
+        ...response, 
+        orderData,
+        userId, // Explicitly send the userId
+      },
+      { headers: { token } }
+    );
+
+    if (data.success) {
+      toast.success("Payment successful!");
+      navigate("/orders");
+      setCartItems({});
+    } else {
+      toast.error(data.message || "Payment verification failed");
+    }
   } catch (error) {
-    console.error("Razorpay initialization error:", error);
-    toast.error("Failed to initialize payment");
+    console.log("Verification error:", error);
+    toast.error(error.message || "Payment verification failed");
   }
+},
+      // Add this to handle user-canceled payments
+      modal: {
+        ondismiss: function () {
+          console.log("Payment dismissed");
+          toast.error("Payment canceled by user");
+        },
+      },
+    };
+
+    // console.log("Razorpay options:", options);
+
+    // Create Razorpay instance and open checkout
+    try {
+      const rzp = new window.Razorpay(options);
+
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment failed:", response.error);
+        toast.error(response.error.description || "Payment failed");
+      });
+
+      rzp.open();
+    } catch (error) {
+      console.error("Razorpay initialization error:", error);
+      toast.error("Failed to initialize payment");
+    }
   };
 
   const onSubmitHandler = async (event) => {
@@ -185,29 +190,33 @@ useEffect(() => {
 
           break;
 
-        case "razorpay":{
+        case "razorpay":
+          {
+            try {
+              const responseRazorPay = await axios.post(
+                backendUrl + "/api/order/razorpay",
+                orderData,
+                { headers: { token } }
+              );
 
+              // console.log("Razorpay response:", responseRazorPay.data);
 
-          try {
-    const responseRazorPay = await axios.post(
-      backendUrl + '/api/order/razorpay',
-      orderData,
-      {headers: {token}}
-    );
-    
-    console.log("Razorpay response:", responseRazorPay.data);
-    
-    if (responseRazorPay.data.success && responseRazorPay.data.order) {
-      // Make sure to call initPay with the order data
-      initPay(responseRazorPay.data.order);
-    } else {
-      toast.error(responseRazorPay.data.message || "Failed to create payment");
-    }
-  } catch (error) {
-    console.error("Razorpay order error:", error);
-    toast.error(error.message || "Failed to create payment order");
-  }
-        }
+              if (
+                responseRazorPay.data.success &&
+                responseRazorPay.data.order
+              ) {
+                // Make sure to call initPay with the order data
+                initPay(responseRazorPay.data.order, orderData);
+              } else {
+                toast.error(
+                  responseRazorPay.data.message || "Failed to create payment"
+                );
+              }
+            } catch (error) {
+              console.error("Razorpay order error:", error);
+              toast.error(error.message || "Failed to create payment order");
+            }
+          }
           break;
         default:
           break;
@@ -338,7 +347,6 @@ useEffect(() => {
             </div>
               */}
           <div className="flex gap-3 flex-col lg:flex-row">
-        
             <div
               onClick={() => setMethod("razorpay")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"

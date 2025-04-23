@@ -23,6 +23,13 @@ const List = ({ token }) => {
   const [bestseller, setBestseller] = useState(false);
   const [showcase, setShowcase] = useState(false);
   const [sizes, setSizes] = useState([]);
+  const [stockValues, setStockValues] = useState({
+    S: 0,
+    M: 0,
+    L: 0,
+    XL: 0,
+    XXL: 0
+  });
 
   const fetchList = async () => {
     try {
@@ -58,6 +65,14 @@ const List = ({ token }) => {
     }
   };
 
+  // Handle stock value changes
+  const handleStockChange = (size, value) => {
+    setStockValues(prev => ({
+      ...prev,
+      [size]: parseInt(value) || 0
+    }));
+  };
+
   const openEditModal = (item) => {
     setEditId(item._id);
     setName(item.name);
@@ -69,6 +84,24 @@ const List = ({ token }) => {
     setShowcase(item.showcase || false);
     setSizes(item.sizes || []);
     setExistingImages(item.images || []);
+    
+    // Initialize stock values
+    const initialStock = {
+      S: 0,
+      M: 0,
+      L: 0,
+      XL: 0,
+      XXL: 0
+    };
+    
+    // If product has stock data, update initialStock
+    if (item.stock) {
+      Object.keys(item.stock).forEach(size => {
+        initialStock[size] = item.stock[size];
+      });
+    }
+    
+    setStockValues(initialStock);
     setImage1(false);
     setImage2(false);
     setImage3(false);
@@ -93,12 +126,25 @@ const List = ({ token }) => {
     setImage2(false);
     setImage3(false);
     setImage4(false);
+    setStockValues({
+      S: 0,
+      M: 0,
+      L: 0,
+      XL: 0,
+      XXL: 0
+    });
   };
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      // Create stock object with selected sizes
+      const stockData = {};
+      sizes.forEach(size => {
+        stockData[size] = stockValues[size];
+      });
+
       const formData = new FormData();
       formData.append("id", editId);
       formData.append("name", name);
@@ -109,6 +155,7 @@ const List = ({ token }) => {
       formData.append("bestseller", bestseller);
       formData.append("showcase", showcase);
       formData.append("sizes", JSON.stringify(sizes));
+      formData.append("stock", JSON.stringify(stockData));
       
       // Append existing images
       if (existingImages.length > 0) {
@@ -140,6 +187,12 @@ const List = ({ token }) => {
     }
   };
 
+  // Calculate total stock for a product
+  const getTotalStock = (item) => {
+    if (!item.stock) return 0;
+    return Object.values(item.stock).reduce((sum, qty) => sum + qty, 0);
+  };
+
   useEffect(() => {
     fetchList();
   }, []);
@@ -149,11 +202,12 @@ const List = ({ token }) => {
       <p className="mb-2">All Products List</p>
       <div className="flex flex-col gap-2">
         {/* List table title */}
-        <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm">
+        <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm">
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
+          <b>Stock</b>
           <b className="text-center">Edit</b>
           <b className="text-center">Remove</b>
         </div>
@@ -161,7 +215,7 @@ const List = ({ token }) => {
         {/* Product list */}
         {list.map((item, index) => (
           <div
-            className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
+            className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
             key={index}
           >
             <img
@@ -172,6 +226,7 @@ const List = ({ token }) => {
             <p>{item.name}</p>
             <p>{item.category}</p>
             <p>{currency}{item.price}</p>
+            <p className={getTotalStock(item) <= 10 ? "text-red-500 font-medium" : ""}>{getTotalStock(item)}</p>
             <button
               onClick={() => openEditModal(item)}
               className="bg-blue-500 text-white px-2 py-1 rounded text-center"
@@ -190,7 +245,7 @@ const List = ({ token }) => {
 
       {/* Edit Modal */}
       {isEditModalOpen && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto ">
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
          <div className="min-h-screen flex items-center justify-center px-4"> 
       <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl mx-4 my-10 transition-transform transform duration-300 ease-out scale-100">
         <div className="flex justify-between items-center mb-6 border-b pb-4">
@@ -210,12 +265,12 @@ const List = ({ token }) => {
             <p className="font-medium text-gray-700 mb-2">Current Images</p>
             <div className="flex gap-3 flex-wrap mb-4">
               {existingImages.map((img, index) => (
-                <div key={index} className="relative rounded  shadow-md">
+                <div key={index} className="relative rounded shadow-md">
                   <img src={img} alt="" className="w-24 h-24 object-cover rounded" />
                   <button 
                     type="button"
                     onClick={() => setExistingImages(existingImages.filter((_, i) => i !== index))}
-                    className="absolute  -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs"
+                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs"
                   >
                     X
                   </button>
@@ -337,6 +392,26 @@ const List = ({ token }) => {
               ))}
             </div>
           </div>
+          
+          {/* Stock Management */}
+          <div>
+            <p className="font-medium text-gray-700 mb-2">Stock Management</p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {sizes.map(size => (
+                <div key={size} className="flex flex-col">
+                  <label className="text-sm text-gray-600 mb-1">{size}</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={stockValues[size]}
+                    onChange={(e) => handleStockChange(size, e.target.value)}
+                    className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="0"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
     
           {/* Checkboxes */}
           <div className="flex flex-col sm:flex-row gap-4 text-sm text-gray-600">
@@ -378,7 +453,6 @@ const List = ({ token }) => {
       </div>
       </div>
     </div>
-    
       )}
     </>
   );
