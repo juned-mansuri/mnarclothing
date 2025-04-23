@@ -1,7 +1,7 @@
 
 
-import logo from './veyn png.png'
-import hero_img from './hero_img.png'
+// import logo from './veyn png.png'
+// import hero_img from './hero_img.png'
 import cart_icon from './cart_icon.png'
 import bin_icon from './bin_icon.png'
 import dropdown_icon from './dropdown_icon.png'
@@ -13,15 +13,15 @@ import star_dull_icon from './star_dull_icon.png'
 import star_icon from './star_icon.png'
 import support_img from './support_img.png'
 import menu_icon from './menu_icon.png'
-import about_img from './veyn 2.jpg'
-import contact_img from './veyn.jpg'
+// import about_img from './veyn 2.jpg'
+// import contact_img from './veyn.jpg'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
-import blackvid from './Black.webm'
-import pistavid from './pista.webm'
-import purplevid from './purple.webm'
-import whitevid from './white.webm'
+// import blackvid from './Black.webm'
+// import pistavid from './pista.webm'
+// import purplevid from './purple.webm'
+// import whitevid from './white.webm'
 import mnarlogo from './mnar logo.png'
 import mnarlogo2 from './mnar logo 2.png'
 import mnarlogobird from './mnar bird.png'
@@ -29,11 +29,11 @@ import mnarbirdleft from './mnar left wing.svg'
 import mnarbirdright from './mnar right wing.svg'
 
 import mnarlogobirdblack from './mnar bird white bg circle.png'
-import mnarvideo from './mnarvideo.webm'
-import rose from './rose.webm'
+// import mnarvideo from './mnarvideo.webm'
+// import rose from './rose.webm'
 import famous from './famous.webm'
 import galaxy from './galaxy.webm'
-import SW from './SW.webm'
+// import SW from './SW.webm'
 import UL from './UL.webm'
 import svgbird from './svgbird.svg'
 import glimpse1 from './glimpse1.png'
@@ -50,8 +50,8 @@ import youtube from './youtube.png'
 import github from './github.png'
 
 export const assets = {
-    logo,
-    hero_img,
+    // logo,
+    // hero_img,
     cart_icon,
     dropdown_icon,
     exchange_icon,
@@ -63,23 +63,23 @@ export const assets = {
     bin_icon,
     support_img,
     menu_icon,
-    about_img,
-    contact_img,
+    // about_img,
+    // contact_img,
     razorpay_logo,
     stripe_logo,
     cross_icon,
-    blackvid,
-    purplevid,
-    pistavid,
-    whitevid,
+    // blackvid,
+    // purplevid,
+    // pistavid,
+    // whitevid,
     mnarlogo,
     mnarlogo2,
     mnarlogobird,
-    mnarvideo,
-    rose,
+    // mnarvideo,
+    // rose,
     famous,
     galaxy,
-    SW,
+    // SW,
     UL,
     svgbird,
     mnarlogobirdblack,
