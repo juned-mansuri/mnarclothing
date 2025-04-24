@@ -52,7 +52,7 @@ import productModel from "../models/productModel.js";
 // In productController.js - update the addProduct function
 const addProduct = async (req,res) => {
   try {
-      const {name, description, price, category, subCategory, sizes, bestseller, showcase, stock,mystery} = req.body
+      const {name, description, price, category, subCategory, sizes, bestseller, showcase, stock} = req.body
 
       const image1 = req.files.image1 && req.files.image1[0]
       const image2 = req.files.image2 && req.files.image2[0]
@@ -78,7 +78,6 @@ const addProduct = async (req,res) => {
           subCategory,
           bestseller: bestseller === 'true' ? true : false,
           showcase: showcase === 'true' ? true : false,
-          showcase: mystery === 'true' ? true : false,
           sizes: JSON.parse(sizes),
           stock: stockData,
           images: imagesUrl,
@@ -100,7 +99,7 @@ const addProduct = async (req,res) => {
 // Also update the updateProduct function to handle stock
 const updateProduct = async (req, res) => {
   try {
-    const { id, name, description, price, category, subCategory, bestseller, showcase, sizes, stock ,mystery } = req.body;
+    const { id, name, description, price, category, subCategory, bestseller, showcase, sizes, stock } = req.body;
     
     // Validate required fields
     if (!id || !name || !category || !price) {
@@ -181,7 +180,6 @@ const updateProduct = async (req, res) => {
     if (subCategory) updatedData.subCategory = subCategory;
     if (bestseller !== undefined) updatedData.bestseller = bestseller === 'true';
     if (showcase !== undefined) updatedData.showcase = showcase === 'true';
-    if (mystery !== undefined) updatedData.mystery = mystery === 'true';
     
     // Handle sizes
     if (sizes) {

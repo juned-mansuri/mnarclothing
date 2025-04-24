@@ -42,9 +42,7 @@ const productSchema = new mongoose.Schema({
     showcase: {
         type: Boolean
     },
-    mystery: {
-        type: Boolean
-    },
+   
     date: {
         type: Number,
         required: true
