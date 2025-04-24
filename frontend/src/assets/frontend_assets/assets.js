@@ -48,6 +48,8 @@ import twitter from './twitter.png'
 import linkedin from './linkedin.png'
 import youtube from './youtube.png'
 import github from './github.png'
+import dev from './dev.jpg'
+import parv from './parv.jpg'
 
 export const assets = {
     // logo,
@@ -97,6 +99,8 @@ export const assets = {
     linkedin,
     youtube,
     github,
+    dev,
+    parv
     
     
 }
