@@ -52,9 +52,17 @@ import productModel from "../models/productModel.js";
 // In productController.js - update the addProduct function
 const addProduct = async (req,res) => {
   try {
+     // First, log what files we actually received
+     console.log("Files received:", req.files);
       const {name, description, price, category, subCategory, sizes, bestseller, showcase, stock} = req.body
 
       const image1 = req.files.image1 && req.files.image1[0]
+      // Log the structure of the first image to understand what properties are available
+    if (image1) {
+      console.log("First image properties:", Object.keys(image1));
+      console.log("Has path property:", image1.hasOwnProperty('path'));
+      console.log("Has buffer property:", image1.hasOwnProperty('buffer'));
+    }
       const image2 = req.files.image2 && req.files.image2[0]
       const image3 = req.files.image3 && req.files.image3[0]
       const image4 = req.files.image4 && req.files.image4[0]
@@ -63,7 +71,11 @@ const addProduct = async (req,res) => {
 
       let imagesUrl = await Promise.all(
           images.map(async (item) => {
-              let result = await cloudinary.uploader.upload(item.path, {resource_type:'image'});
+            // Convert buffer to base64 data URI
+            const b64 = Buffer.from(item.buffer).toString('base64');
+            const dataURI = `data:${item.mimetype};base64,${b64}`;
+
+              let result = await cloudinary.uploader.upload(dataURI , {resource_type:'image'});
               return result.secure_url;
           })
       )
@@ -135,7 +147,10 @@ const updateProduct = async (req, res) => {
         // Upload to Cloudinary
         imagesUrl = await Promise.all(
           images.map(async (item) => {
-            let result = await cloudinary.uploader.upload(item.path, {resource_type: 'image'});
+           // With this:
+const b64 = Buffer.from(item.buffer).toString('base64');
+const dataURI = `data:${item.mimetype};base64,${b64}`;
+const result = await cloudinary.uploader.upload(dataURI, {resource_type: 'image'});
             return result.secure_url;
           })
         );
