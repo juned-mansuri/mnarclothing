@@ -9,7 +9,6 @@ import Glimpse from "../components/Glimpse";
 import Pattern from "../components/Pattern";
 import Showcase from "../components/Showcase";
 import GenderCategories from "../components/GenderCategories";
-import Mystery from "../components/Mystery";
 
 const Home = () => {
   return (
@@ -18,7 +17,6 @@ const Home = () => {
       <Glimpse className="" />
       {/* <LatestCollection /> */}
       <GenderCategories/>
-      <Mystery/>
       <Showcase />
       {/* <BestSeller /> */}
       <OurPolicy />
