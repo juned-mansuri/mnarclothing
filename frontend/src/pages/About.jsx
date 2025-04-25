@@ -47,7 +47,7 @@ const About = () => {
           {/* Meet the Team Section */}
           <div className="mt-20 text-center">
   <h2 className="text-3xl md:text-4xl font-light tracking-wide">
-    MEET THE <span className="font-bold">CREATOR'S</span>
+    MEET THE <span className="font-bold">FOUNDER'S</span>
   </h2>
 
   <div className="flex flex-col md:flex-row justify-center items-center gap-10 mt-16 px-4">
@@ -57,21 +57,22 @@ const About = () => {
       <h3 className="text-3xl font-semibold mt-1">Dev Sangtani</h3>
       <p className="mt-2 text-sm text-gray-600 leading-relaxed">
       
-      Juned Mansuri is a developer at Mnar Clothing, contributing to the technical development of the platform. His work supports the brand’s digital growth and enhances user experience.
-      </p>
+      Dev Sangtani is the founder of Mnar — the visionary force behind the brand. From setting the tone to driving the creative spirit, he leads Mnar with purpose, passion, and a taste for what’s next in fashion.
+
+</p>
       <span className='text-end flex gap-2 mt-10 me-0 justify-end'>
-        <a target='_blank' href="https://www.instagram.com/thejumicreates/">
+        <a target='_blank' href="https://www.instagram.com/dev2401_?igsh=NW9ieXhkdGNtZmE1">
         <img className='w-10' src={assets.insta} alt="" />
         </a>
-        <a target='_blank' href="https://x.com/bytesizedjuned">
+        <a target='_blank' href="https://x.com/DevSangtani4?t=MQYFfRydvxjp2HOyESqacw&s=09">
         <img className='w-10' src={assets.twitter} alt="" />
         </a>
-        <a target='_blank' href="https://www.linkedin.com/in/juned-mansuri-bb9b7923b/">
-        <img className='w-10' src={assets.linkedin} alt="" />
+        <a target='_blank' href="https://www.facebook.com/share/18deG7fWYq/">
+        <img className='w-10' src={assets.facebook} alt="" />
         </a>
-        <a target='_blank' href="https://github.com/juned-mansuri">
+        {/* <a target='_blank' href="https://github.com/juned-mansuri">
         <img className='w-10' src={assets.github} alt="" />
-        </a>
+        </a> */}
         </span>
      
     </div>
@@ -79,7 +80,7 @@ const About = () => {
     {/* Image 1 - Dev */}
     <img
       src={assets.dev}
-      alt="Juned Mansuri"
+      alt="dev sangtani"
       className="w-72  h-auto object-cover "
     />
 
@@ -93,26 +94,24 @@ const About = () => {
     {/* Text Right - Jenam */}
     <div className="max-w-sm text-left">
     <p className="text-xl text-gray-500 ">Co Founder</p>
-      <h3 className="text-3xl font-semibold mt-1 ">Jenam Jain</h3>
+      <h3 className="text-3xl font-semibold mt-1 ">Apoorv barua</h3>
       <p className="mt-2 text-sm text-gray-600 leading-relaxed ">
-      Jenam Jain is a developer at Mnar Clothing, focusing on backend systems and infrastructure. He ensures performance, stability, and reliability across all technical operations.
-      </p>
-      <span className='text-end flex gap-2 mt-10 me-0 justify-start'>
-      <a target='_blank' href="">
-        <img className='w-10' src={assets.github} alt="" />
+      Apoorv barua is the co-founder of Mnar, bringing clarity and culture to the brand’s journey. With a sharp sense for aesthetics and ambition, he helps shape Mnar’s identity, story, and style from the ground up. </p>
+      <span className='text-start flex gap-2 mt-10 me-0 justify-start'>
+      <a target='_blank' href="https://www.facebook.com/apoorv.barua.5?mibextid=ZbWKwL">
+        <img className='w-10' src={assets.facebook} alt="" />
         </a>
-        <a target='_blank' href="">
-        <img className='w-10' src={assets.linkedin} alt="" />
-        </a>
-        <a target='_blank' href="">
+        <a target='_blank' href="https://x.com/apoorv2704?t=AdXu12Y4F_m1KnAoZ9DQSw&s=09">
         <img className='w-10' src={assets.twitter} alt="" />
         </a>
-        <a target='_blank' href="">
+        <a target='_blank' href="https://www.instagram.com/apoorv_2704?igsh=MTV2OGtta291azBteg==">
         <img className='w-10' src={assets.insta} alt="" />
         </a>
-        
        
-        
+    
+        {/* <a target='_blank' href="https://github.com/juned-mansuri">
+        <img className='w-10' src={assets.github} alt="" />
+        </a> */}
         </span>
     </div>
   </div>
@@ -172,16 +171,11 @@ const About = () => {
       Jenam Jain is a developer at Mnar Clothing, focusing on backend systems and infrastructure. He ensures performance, stability, and reliability across all technical operations.
       </p>
       <span className='text-end flex gap-2 mt-10 me-0 justify-start'>
-      <a target='_blank' href="">
+      <a target='_blank' href="https://github.com/jenamjain">
         <img className='w-10' src={assets.github} alt="" />
         </a>
-        <a target='_blank' href="">
-        <img className='w-10' src={assets.linkedin} alt="" />
-        </a>
-        <a target='_blank' href="">
-        <img className='w-10' src={assets.twitter} alt="" />
-        </a>
-        <a target='_blank' href="">
+      
+        <a target='_blank' href="https://www.instagram.com/jenam._.jain?igsh=N3Bmd3NucmV6amRu">
         <img className='w-10' src={assets.insta} alt="" />
         </a>
         
