@@ -47,6 +47,16 @@ const PlaceOrder = () => {
     document.body.appendChild(script);
   }, []);
 
+  // Add this useEffect at the beginning to check authentication
+  useEffect(() => {
+    // Check if token exists
+    if (!token) {
+      toast.error("Please login to continue");
+      navigate("/login"); // Redirect to login page
+      return;
+    }
+  }, [token, navigate]);
+
   const initPay = (order,orderData) => {
     console.log("Initializing payment with order:", order);
 
@@ -134,6 +144,13 @@ handler: async (response) => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+     // Check if user is logged in before proceeding
+     if (!token) {
+      toast.error("Please login to continue");
+      navigate("/login");
+      return;
+    }
+    
     try {
       let orderItems = [];
       for (const items in cartItems) {
@@ -221,11 +238,24 @@ handler: async (response) => {
         default:
           break;
       }
+
+
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+       // If the error is due to invalid token or session expired
+       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        toast.error("Session expired. Please login again");
+        navigate("/login");
+        return;
+      }
+      toast.error(error.message);
     }
   };
+    // If token doesn't exist, don't render the component
+    if (!token) {
+      return null; // Or you could return a loading spinner
+    }
 
   return (
     <form
