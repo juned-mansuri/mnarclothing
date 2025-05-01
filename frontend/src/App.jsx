@@ -22,6 +22,7 @@ import { Analytics } from "@vercel/analytics/react"
 import Pattern from './components/Pattern'
 import MenCollection from './components/MenCollection'
 import WomenCollection from './components/WomenCollection'
+import OutOfService from './components/OutOfService'
 
 
 
@@ -31,14 +32,15 @@ const App = () => {
     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-[#ffffff] '  >
       <Analytics />
       <ToastContainer/>
-      <ScrollToTop/>
+      {/* <ScrollToTop/>
       <Navbar/>
       <SearchBar/>
-      <Pattern/>
+      <Pattern/> */}
       
       <Routes>
-      <Route path='/' element={< Home />} />
-      <Route path="/men-collection" element={<MenCollection />} />
+      {/* <Route path='/' element={< Home />} /> */}
+      <Route path='/' element={<OutOfService/>} />
+      {/* <Route path="/men-collection" element={<MenCollection />} />
       <Route path="/women-collection" element={<WomenCollection />} />
     
       <Route path='/collection' element={<Collection/>} />
@@ -52,11 +54,11 @@ const App = () => {
     
       <Route path='/orders' element={< Orders />} />
       <Route path='/verify' element={< Verify />} />
-      <Route path='/terms' element={<Terms/>} />
+      <Route path='/terms' element={<Terms/>} /> */}
     
 
       </Routes>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   )
 }
