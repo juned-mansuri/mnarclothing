@@ -32,10 +32,10 @@ const App = () => {
     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-[#ffffff] '  >
       <Analytics />
       <ToastContainer/>
-      {/* <ScrollToTop/>
+      <ScrollToTop/>
       <Navbar/>
       <SearchBar/>
-      <Pattern/> */}
+      <Pattern/>
       
       <Routes>
       <Route path='/' element={< Home />} />
@@ -58,7 +58,7 @@ const App = () => {
     
 
       </Routes>
-      {/* <Footer/> */}
+      <Footer/>
     </div>
   )
 }
