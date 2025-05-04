@@ -38,9 +38,9 @@ const App = () => {
       <Pattern/> */}
       
       <Routes>
-      {/* <Route path='/' element={< Home />} /> */}
-      <Route path='/' element={<OutOfService/>} />
-      {/* <Route path="/men-collection" element={<MenCollection />} />
+      <Route path='/' element={< Home />} />
+      {/* <Route path='/' element={<OutOfService/>} /> */}
+      <Route path="/men-collection" element={<MenCollection />} />
       <Route path="/women-collection" element={<WomenCollection />} />
     
       <Route path='/collection' element={<Collection/>} />
@@ -54,7 +54,7 @@ const App = () => {
     
       <Route path='/orders' element={< Orders />} />
       <Route path='/verify' element={< Verify />} />
-      <Route path='/terms' element={<Terms/>} /> */}
+      <Route path='/terms' element={<Terms/>} />
     
 
       </Routes>
