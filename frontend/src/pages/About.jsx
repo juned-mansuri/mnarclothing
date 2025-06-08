@@ -47,7 +47,7 @@ const About = () => {
           {/* Meet the Team Section */}
           <div className="mt-20 text-center">
   <h2 className="text-3xl md:text-4xl font-light tracking-wide">
-    MEET THE <span className="font-bold">FOUNDER'S</span>
+    MEET THE <span className="font-bold">FOUNDER </span>
   </h2>
 
   <div className="flex flex-col md:flex-row justify-center items-center gap-10 mt-16 px-4">
@@ -85,14 +85,14 @@ const About = () => {
     />
 
     {/* Image 2 - Parv */}
-    <img
+    {/* <img
       src={assets.parv}
       alt="Jenam Jain"
       className="w-72 h-auto object-cover "
-    />
+    /> */}
 
-    {/* Text Right - Jenam */}
-    <div className="max-w-sm text-left">
+    {/* Text Right - Apoorv */}
+    {/* <div className="max-w-sm text-left">
     <p className="text-xl text-gray-500 ">Co Founder</p>
       <h3 className="text-3xl font-semibold mt-1 ">Apoorv barua</h3>
       <p className="mt-2 text-sm text-gray-600 leading-relaxed ">
@@ -107,13 +107,9 @@ const About = () => {
         <a target='_blank' href="https://www.instagram.com/apoorv_2704?igsh=MTV2OGtta291azBteg==">
         <img className='w-10' src={assets.insta} alt="" />
         </a>
-       
-    
-        {/* <a target='_blank' href="https://github.com/juned-mansuri">
-        <img className='w-10' src={assets.github} alt="" />
-        </a> */}
+
         </span>
-    </div>
+    </div> */}
   </div>
 </div>
 
