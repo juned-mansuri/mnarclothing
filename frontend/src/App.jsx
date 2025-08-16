@@ -9,6 +9,10 @@ import Cart from './pages/Cart'
 import Login from './pages/Login'
 import PlaceOrder from './pages/PlaceOrder'
 import Orders from './pages/Orders'
+import Coins from './pages/Coins'
+import MyRedemptions from './pages/MyRedemptions'
+import EarlyAccess from './pages/EarlyAccess'
+import LimitedEdition from './pages/LimitedEdition'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
@@ -51,7 +55,10 @@ const App = () => {
       <Route path='/login' element={< Login />} />
       <Route path='/place-order' element={< PlaceOrder />} />
       <Route path="/profile" element={<Profile />} />
-    
+      <Route path="/coins" element={<Coins />} />
+      <Route path="/my-redemptions" element={<MyRedemptions />} />
+      <Route path="/early-access" element={<EarlyAccess />} />
+      <Route path="/limited-edition" element={<LimitedEdition />} />
       <Route path='/orders' element={< Orders />} />
       <Route path='/verify' element={< Verify />} />
       <Route path='/terms' element={<Terms/>} />

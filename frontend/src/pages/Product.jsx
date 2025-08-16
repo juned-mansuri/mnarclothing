@@ -13,7 +13,7 @@ Modal.setAppElement("#root"); // for accessibility
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart, navigate } = useContext(ShopContext);
+  const { products, currency, addToCart, navigate, coinBalance, token } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
@@ -21,6 +21,26 @@ const Product = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [selectedSizeStock, setSelectedSizeStock] = useState(0);
+  const [coinsToUse, setCoinsToUse] = useState(0);
+
+  // Coin to rupee conversion rate: 10 coins = 1 rupee
+  const COIN_TO_RUPEE_RATE = 10;
+
+  // Calculate maximum coins that can be used (up to 50% of product price)
+  const getMaxUsableCoins = () => {
+    if (!productData) return 0;
+    const maxDiscount = Math.floor(productData.price * 0.5); // 50% max discount
+    const maxCoinsFromBalance = coinBalance;
+    const maxCoinsFromPrice = maxDiscount * COIN_TO_RUPEE_RATE;
+    return Math.min(maxCoinsFromBalance, maxCoinsFromPrice);
+  };
+
+  // Calculate discounted price
+  const getDiscountedPrice = () => {
+    if (!productData) return 0;
+    const discount = Math.floor(coinsToUse / COIN_TO_RUPEE_RATE);
+    return Math.max(0, productData.price - discount);
+  };
 
   const fetchProductData = async () => {
     products.map((item) => {
@@ -54,8 +74,26 @@ const Product = () => {
       return;
     }
     
-    // Add to cart first (reusing existing functionality)
-    addToCart(productData._id, size);
+    // Only add coin discount data if coins are actually being used
+    let cartItemData = null;
+    if (coinsToUse > 0) {
+      cartItemData = {
+        itemId: productData._id,
+        size: size,
+        coinsUsed: coinsToUse,
+        discountAmount: Math.floor(coinsToUse / COIN_TO_RUPEE_RATE),
+        originalPrice: productData.price,
+        discountedPrice: getDiscountedPrice()
+      };
+    }
+
+    // Add to cart first with discount data (or null if no coins used)
+    addToCart(productData._id, size, cartItemData);
+    
+    // Show success message with discount info
+    if (coinsToUse > 0) {
+      toast.success(`Proceeding to checkout with ₹${Math.floor(coinsToUse / COIN_TO_RUPEE_RATE)} coin discount!`);
+    }
     
     // Navigate directly to checkout/place-order page
     navigate("/place-order");
@@ -73,7 +111,27 @@ const Product = () => {
       return;
     }
 
-    addToCart(productData._id, size);
+    // Only add coin discount data if coins are actually being used
+    let cartItemData = null;
+    if (coinsToUse > 0) {
+      cartItemData = {
+        itemId: productData._id,
+        size: size,
+        coinsUsed: coinsToUse,
+        discountAmount: Math.floor(coinsToUse / COIN_TO_RUPEE_RATE),
+        originalPrice: productData.price,
+        discountedPrice: getDiscountedPrice()
+      };
+    }
+
+    addToCart(productData._id, size, cartItemData);
+    
+    // Show success message with discount info
+    if (coinsToUse > 0) {
+      toast.success(`Added to cart with ₹${Math.floor(coinsToUse / COIN_TO_RUPEE_RATE)} coin discount!`);
+    } else {
+      toast.success("Added to cart successfully!");
+    }
   };
 
   const handleNext = () => {
@@ -160,10 +218,59 @@ const Product = () => {
             ))}
             <img src={assets.star_dull_icon} alt="" className="w-3.5" />
           </div>
-          <p className="mt-5 text-3xl font-medium">
-            {currency}
-            {productData.price}
-          </p>
+          <div className="mt-5">
+            {/* Original Price */}
+            <div className="flex items-center gap-3 mb-3">
+              <p className={`text-3xl font-medium ${coinsToUse > 0 ? 'line-through text-gray-400' : ''}`}>
+                {currency}
+                {productData.price}
+              </p>
+              {coinsToUse > 0 && (
+                <p className="text-3xl font-medium text-green-600">
+                  {currency}
+                  {getDiscountedPrice()}
+                </p>
+              )}
+            </div>
+
+            {/* Coin Discount Section */}
+            {token && coinBalance > 0 && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xl">🪙</span>
+                  <span className="font-medium text-gray-700">Use your coins for discount!</span>
+                </div>
+                <p className="text-sm text-gray-600 mb-3">
+                  You have {coinBalance} coins • 10 coins = ₹1 discount • Max 50% off
+                </p>
+                
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700">
+                    Coins to use:
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max={getMaxUsableCoins()}
+                    value={coinsToUse}
+                    onChange={(e) => setCoinsToUse(Number(e.target.value))}
+                    className="flex-1 h-2 bg-yellow-200 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-gray-700 min-w-[60px]">
+                    {coinsToUse} coins
+                  </span>
+                </div>
+                
+                {coinsToUse > 0 && (
+                  <div className="mt-2 text-sm">
+                    <p className="text-green-600 font-medium">
+                      You save: ₹{Math.floor(coinsToUse / COIN_TO_RUPEE_RATE)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           
           {/* Expandable Description */}
           <div className="relative mt-5 text-gray-500 md:w-4/5">

@@ -2,6 +2,7 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
+import { processReferralSignup, addCoinsToUser } from "./coinController.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -35,7 +36,7 @@ const loginUser = async (req, res) => {
 // route for user registration
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, referralCode } = req.body;
 
     // checking user already exists or not
     const exists = await userModel.findOne({ email });
@@ -67,6 +68,21 @@ const registerUser = async (req, res) => {
     });
 
     const user = await newUser.save();
+
+    // Award signup bonus coins
+    await addCoinsToUser(
+      user._id,
+      25, // 25 MNAR Coins signup bonus
+      'EARN',
+      'SIGNUP_BONUS',
+      'Welcome to MNAR! Here are your welcome coins 🎉',
+      { isNewUser: true }
+    );
+
+    // Process referral if referral code provided
+    if (referralCode) {
+      await processReferralSignup(referralCode, user._id);
+    }
 
     const token = createToken(user._id);
     res.json({ success: true, token: token });
@@ -122,4 +138,47 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, adminLogin };
+// Clean up cart data for deleted products
+const cleanupUserCarts = async (req, res) => {
+  try {
+    const productModel = await import("../models/productModel.js");
+    
+    // Get all existing product IDs
+    const existingProducts = await productModel.default.find({}, '_id');
+    const existingProductIds = existingProducts.map(p => p._id.toString());
+    
+    // Get all users with cart data
+    const users = await userModel.find({ cartData: { $exists: true, $ne: {} } });
+    
+    let cleanedCount = 0;
+    
+    for (const user of users) {
+      let cartUpdated = false;
+      const cartData = user.cartData;
+      
+      // Check each product in user's cart
+      for (const productId in cartData) {
+        if (!existingProductIds.includes(productId)) {
+          delete cartData[productId];
+          cartUpdated = true;
+          cleanedCount++;
+        }
+      }
+      
+      // Update user if cart was modified
+      if (cartUpdated) {
+        await userModel.findByIdAndUpdate(user._id, { cartData });
+      }
+    }
+    
+    res.json({ 
+      success: true, 
+      message: `Cleaned ${cleanedCount} invalid cart items from user carts` 
+    });
+  } catch (error) {
+    console.log('Cart cleanup error:', error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export { loginUser, registerUser, adminLogin, cleanupUserCarts };

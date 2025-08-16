@@ -22,6 +22,14 @@ const Sidebar = () => {
             <img className=' h-5' src={assets.mnarlogobird} alt="" />
             <p className='hidden md:block'>Glimpses</p>
             </NavLink>
+            <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to={'/coins'}>
+            <span className='text-xl'>🪙</span>
+            <p className='hidden md:block'>MNAR Coins</p>
+            </NavLink>
+            <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to={'/redeem-codes'}>
+            <span className='text-xl'>🎫</span>
+            <p className='hidden md:block'>Redeem Codes</p>
+            </NavLink>
         </div>
 
     </div>

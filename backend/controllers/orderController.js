@@ -1,6 +1,7 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import productModel from "../models/productModel.js"; // Import product model
+import { awardPurchaseCoins, applyRedemptionCode } from "./coinController.js"; // Import coin functionality
 import Stripe from "stripe";
 import razorpay from "razorpay";
 import crypto from "crypto";
@@ -139,7 +140,18 @@ const validateStockAvailability = async (items) => {
 
 const placeOrder = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
+    const { userId, items, amount, address, appliedRedemption, originalAmount, coinDiscounts, totalCoinsUsed } = req.body;
+
+    // Validate that only one discount method is being used
+    const hasRedemptionDiscount = appliedRedemption && appliedRedemption.discountAmount > 0;
+    const hasCoinDiscounts = coinDiscounts && Object.keys(coinDiscounts).length > 0 && totalCoinsUsed > 0;
+
+    if (hasRedemptionDiscount && hasCoinDiscounts) {
+      return res.json({ 
+        success: false, 
+        message: "Cannot use both redemption codes and coin discounts in the same order. Please use only one discount method." 
+      });
+    }
 
     // Validate stock availability first
     const stockValidation = await validateStockAvailability(items);
@@ -150,18 +162,47 @@ const placeOrder = async (req, res) => {
     const orderData = {
       userId,
       items,
-      amount,
+      amount, // This is already the discounted amount from frontend
+      originalAmount: originalAmount || amount, // Store original amount for reference
       address,
       paymentMethod: "COD",
       payment: false,
       date: Date.now(),
+      appliedRedemption: appliedRedemption || null,
+      coinDiscounts: coinDiscounts || {},
+      totalCoinsUsed: totalCoinsUsed || 0
     };
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
 
+    // If redemption was applied, mark it as used
+    if (appliedRedemption && appliedRedemption.redemptionId) {
+      try {
+        await applyRedemptionCode({
+          body: {
+            redemptionId: appliedRedemption.redemptionId,
+            orderId: newOrder._id
+          }
+        }, {
+          json: () => {} // Mock response object
+        });
+      } catch (redemptionError) {
+        console.error('Error applying redemption code:', redemptionError);
+        // Don't fail the order if redemption marking fails
+      }
+    }
+
     // Update product stock after order is saved
     await updateProductStock(items);
+
+    // Award purchase coins based on final amount paid
+    try {
+      await awardPurchaseCoins(userId, amount, newOrder._id.toString());
+    } catch (coinError) {
+      console.error('Error awarding purchase coins:', coinError);
+      // Don't fail the order if coin awarding fails
+    }
 
     // Clear user's cart
     await userModel.findByIdAndUpdate(userId, { cartData: {} });
@@ -175,7 +216,18 @@ const placeOrder = async (req, res) => {
 
 const placeOrderRazorpay = async (req, res) => {
   try {
-    const { amount, items } = req.body;
+    const { amount, items, appliedRedemption, coinDiscounts, totalCoinsUsed } = req.body;
+
+    // Validate that only one discount method is being used
+    const hasRedemptionDiscount = appliedRedemption && appliedRedemption.discountAmount > 0;
+    const hasCoinDiscounts = coinDiscounts && Object.keys(coinDiscounts).length > 0 && totalCoinsUsed > 0;
+
+    if (hasRedemptionDiscount && hasCoinDiscounts) {
+      return res.json({ 
+        success: false, 
+        message: "Cannot use both redemption codes and coin discounts in the same order. Please use only one discount method." 
+      });
+    }
 
     // Validate stock availability first
     if (items && items.length > 0) {
@@ -186,7 +238,7 @@ const placeOrderRazorpay = async (req, res) => {
     }
 
     const options = {
-      amount: amount * 100,
+      amount: amount * 100, // Use the discounted amount from frontend
       currency: currency.toUpperCase(),
       receipt: `receipt_order_${Date.now()}`,
     };
@@ -217,21 +269,61 @@ const verifyRazorpay = async (req, res) => {
       .digest("hex");
 
     if (expectedSign === razorpay_signature) {
+      // Validate that only one discount method is being used
+      const hasRedemptionDiscount = orderData.appliedRedemption && orderData.appliedRedemption.discountAmount > 0;
+      const hasCoinDiscounts = orderData.coinDiscounts && Object.keys(orderData.coinDiscounts).length > 0 && orderData.totalCoinsUsed > 0;
+
+      if (hasRedemptionDiscount && hasCoinDiscounts) {
+        return res.json({ 
+          success: false, 
+          message: "Cannot use both redemption codes and coin discounts in the same order. Please use only one discount method." 
+        });
+      }
+
       // Make sure userId is included in the order data
       const newOrder = new orderModel({
         userId,
         items: orderData.items,
-        amount: orderData.amount,
+        amount: orderData.amount, // This is already the discounted amount
+        originalAmount: orderData.originalAmount || orderData.amount,
         address: orderData.address,
         paymentMethod: "razorpay",
         payment: true,
         date: Date.now(),
+        appliedRedemption: orderData.appliedRedemption || null,
+        coinDiscounts: orderData.coinDiscounts || {},
+        totalCoinsUsed: orderData.totalCoinsUsed || 0
       });
 
       await newOrder.save();
 
+      // If redemption was applied, mark it as used
+      if (orderData.appliedRedemption && orderData.appliedRedemption.redemptionId) {
+        try {
+          await applyRedemptionCode({
+            body: {
+              redemptionId: orderData.appliedRedemption.redemptionId,
+              orderId: newOrder._id
+            }
+          }, {
+            json: () => {} // Mock response object
+          });
+        } catch (redemptionError) {
+          console.error('Error applying redemption code:', redemptionError);
+          // Don't fail the order if redemption marking fails
+        }
+      }
+
       // Update product stock after successful payment
       await updateProductStock(orderData.items);
+
+      // Award MNAR Coins for purchase based on final amount paid
+      try {
+        await awardPurchaseCoins(userId, orderData.amount, newOrder._id);
+      } catch (coinError) {
+        console.error('Error awarding purchase coins:', coinError);
+        // Don't fail the order if coin awarding fails
+      }
 
       // Clear user's cart
       await userModel.findByIdAndUpdate(userId, { cartData: {} });
@@ -322,6 +414,11 @@ const createOrder = async (req, res) => {
 
     // Update product stock after order is saved
     await updateProductStock(formattedItems);
+
+    // Award MNAR Coins for purchase
+    if (userId) {
+      await awardPurchaseCoins(userId, amount, savedOrder._id);
+    }
 
     // Clear user's cart if userId is provided
     if (userId) {

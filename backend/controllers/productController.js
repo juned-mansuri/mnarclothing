@@ -1,5 +1,6 @@
 import {v2 as cloudinary} from "cloudinary";
 import productModel from "../models/productModel.js";
+import userModel from "../models/userModel.js";
 
     
     // fn for listing product
@@ -21,9 +22,19 @@ import productModel from "../models/productModel.js";
     const removeProduct = async (req,res) => {
         
         try {
+            const productId = req.body.id;
             
-            await productModel.findByIdAndDelete(req.body.id)
-            res.json({success:true ,message:"Product removed"})
+            // Remove the product
+            await productModel.findByIdAndDelete(productId);
+            
+            // Clean up cart data for all users who have this product in their cart
+            await userModel.updateMany(
+                { [`cartData.${productId}`]: { $exists: true } },
+                { $unset: { [`cartData.${productId}`]: "" } }
+            );
+            
+            console.log(`Product ${productId} removed and cleaned from all user carts`);
+            res.json({success:true ,message:"Product removed and cart data cleaned"});
             
         } catch (error) {
             
@@ -236,4 +247,41 @@ const result = await cloudinary.uploader.upload(dataURI, {resource_type: 'image'
   }
 };
 
-export {listProducts , addProduct, removeProduct, singleProduct, updateProduct}
+// Get early access products
+const getEarlyAccessProducts = async (req, res) => {
+    try {
+        // You can add a field 'isEarlyAccess' to your product model
+        // For now, return products that have a specific category or tag
+        const products = await productModel.find({ 
+            category: 'early-access'
+        });
+        
+        res.json({
+            success: true,
+            products
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+// Get limited edition products
+const getLimitedEditionProducts = async (req, res) => {
+    try {
+        // Return products that have limited edition category or tag
+        const products = await productModel.find({ 
+            category: 'limited-edition'
+        });
+        
+        res.json({
+            success: true,
+            products
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+export {listProducts , addProduct, removeProduct, singleProduct, updateProduct, getEarlyAccessProducts, getLimitedEditionProducts}

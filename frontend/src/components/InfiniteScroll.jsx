@@ -26,6 +26,7 @@ export default function InfiniteScroll({
 }) {
   const wrapperRef = useRef(null);
   const containerRef = useRef(null);
+  const isInitializedRef = useRef(false);
 
   const getTiltTransform = () => {
     if (!isTilted) return "none";
@@ -36,8 +37,10 @@ export default function InfiniteScroll({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || isInitializedRef.current) return;
     if (items.length === 0) return;
+
+    isInitializedRef.current = true;
 
     const divItems = gsap.utils.toArray(container.children);
     if (!divItems.length) return;
@@ -126,6 +129,8 @@ export default function InfiniteScroll({
     return () => {
       observer.kill();
       if (rafId) cancelAnimationFrame(rafId);
+      // Reset initialization state for potential re-mount
+      isInitializedRef.current = false;
     };
   }, [
     items,

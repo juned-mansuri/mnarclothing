@@ -13,10 +13,13 @@ const Squares = ({
   const numSquaresY = useRef(0);
   const gridOffset = useRef({ x: 0, y: 0 });
   const hoveredSquareRef = useRef(null);
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || isInitializedRef.current) return;
+    
+    isInitializedRef.current = true;
     const ctx = canvas.getContext("2d");
 
     const resizeCanvas = () => {
@@ -142,6 +145,8 @@ const Squares = ({
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      // Reset initialization state for potential re-mount
+      isInitializedRef.current = false;
     };
   }, [direction, speed, borderColor, hoverFillColor, squareSize]);
 

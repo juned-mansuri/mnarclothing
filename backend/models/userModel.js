@@ -14,7 +14,19 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-   
+    mnarCoins: {
+        type: Number,
+        default: 0
+    },
+    totalCoinsEarned: {
+        type: Number,
+        default: 0
+    },
+    referralCode: {
+        type: String,
+        unique: true,
+        sparse: true // Allows multiple null values
+    },
     cartData: {type: Object,default: {} }
 } ,{minimize: false})
 

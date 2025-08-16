@@ -8,6 +8,7 @@ import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoute.js'
 import glimpseRouter from './routes/glimpseRoutes.js'  // Add this import
+import coinRouter from './routes/coinRoute.js'  // Add coin routes
 
 // App Config
 const app = express()
@@ -24,6 +25,7 @@ app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/glimpses', glimpseRouter)  // Add this line to register glimpse routes
+app.use('/api/coins', coinRouter)  // Add coin routes
 
 app.get('/', (req, res) => {
     res.send("Api Working")

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
+import RedemptionCodeInput from "../components/RedemptionCodeInput";
 import { assets } from "../assets/frontend_assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
@@ -8,6 +9,7 @@ import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
+  const [appliedRedemption, setAppliedRedemption] = useState(null);
 
   const {
     navigate,
@@ -18,7 +20,36 @@ const PlaceOrder = () => {
     getCartAmount,
     delivery_fee,
     products,
+    cartCoinDiscounts,
+    setCartCoinDiscounts,
+    clearAllCoinDiscounts,
   } = useContext(ShopContext);
+
+  // Check if coins are being used for discounts
+  const hasActiveCoinDiscounts = () => {
+    return Object.keys(cartCoinDiscounts).length > 0 && 
+           Object.values(cartCoinDiscounts).some(discount => discount.coinsUsed > 0);
+  };
+
+  // Filter out any coin discounts with 0 coins used
+  const getValidCoinDiscounts = () => {
+    const validDiscounts = {};
+    Object.entries(cartCoinDiscounts).forEach(([key, discount]) => {
+      if (discount.coinsUsed > 0) {
+        validDiscounts[key] = discount;
+      }
+    });
+    return validDiscounts;
+  };
+
+  // Handle redemption code application with validation
+  const handleRedemptionCodeApplied = (redemption) => {
+    if (redemption && hasActiveCoinDiscounts()) {
+      toast.error('Cannot apply discount code when coin discounts are active. Please remove coin discounts first.');
+      return;
+    }
+    setAppliedRedemption(redemption);
+  };
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,6 +68,12 @@ const PlaceOrder = () => {
     const value = event.target.value;
 
     setFormData((data) => ({ ...data, [name]: value }));
+  };
+
+  const clearCartAndDiscounts = () => {
+    setCartItems({});
+    setCartCoinDiscounts({});
+    localStorage.removeItem('cartCoinDiscounts');
   };
 
   // At the top of your component, add this useEffect to load the script
@@ -106,7 +143,7 @@ handler: async (response) => {
     if (data.success) {
       toast.success("Payment successful!");
       navigate("/orders");
-      setCartItems({});
+      clearCartAndDiscounts();
     } else {
       toast.error(data.message || "Payment verification failed");
     }
@@ -168,15 +205,34 @@ handler: async (response) => {
         }
       }
 
+      // Calculate total coins used and savings
+      let totalCoinsUsed = 0;
+      let totalCoinSavings = 0;
+      
+      Object.values(getValidCoinDiscounts()).forEach(discount => {
+        totalCoinsUsed += discount.coinsUsed;
+        totalCoinSavings += discount.discountAmount;
+      });
+
+      // Calculate final amount with redemption discount and coin discounts
+      const subtotal = getCartAmount();
+      const discount = appliedRedemption?.discountAmount || 0;
+      const finalAmount = Math.max(0, subtotal + delivery_fee - discount - totalCoinSavings);
+
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee,
+        amount: finalAmount,
+        originalAmount: subtotal + delivery_fee,
+        appliedRedemption: appliedRedemption,
+        coinDiscounts: getValidCoinDiscounts(),
+        totalCoinsUsed: totalCoinsUsed,
+        totalCoinSavings: totalCoinSavings
       };
 
       switch (method) {
         // Api calls for COD orders
-        case "cod":
+        case "cod": {
           const response = await axios.post(
             backendUrl + "/api/order/place",
             orderData,
@@ -184,15 +240,16 @@ handler: async (response) => {
           );
 
           if (response.data.success) {
-            setCartItems({});
+            clearCartAndDiscounts();
             console.log(cartItems);
             navigate("/orders");
           } else {
             toast.error(response.data.message);
           }
           break;
+        }
 
-        case "stripe":
+        case "stripe": {
           const responseStripe = await axios.post(
             backendUrl + "/api/order/stripe",
             orderData,
@@ -206,6 +263,7 @@ handler: async (response) => {
           }
 
           break;
+        }
 
         case "razorpay":
           {
@@ -359,8 +417,47 @@ handler: async (response) => {
       {/* Right Side */}
       <div className="mt-8">
         <div className="mt-8 min-w-80">
-          <CartTotal />
+          {/* Coin Discount Summary */}
+          {Object.keys(getValidCoinDiscounts()).length > 0 && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-medium text-gray-800 flex items-center gap-2">
+                  <span className="text-xl">🪙</span>
+                  Coin Discounts Applied
+                </h3>
+                <button
+                  onClick={clearAllCoinDiscounts}
+                  className="text-red-600 hover:text-red-800 text-sm font-medium"
+                >
+                  Remove All
+                </button>
+              </div>
+              {Object.entries(getValidCoinDiscounts()).map(([key, discount]) => (
+                <div key={key} className="text-sm text-gray-600 mb-1">
+                  {discount.coinsUsed} coins = ₹{discount.discountAmount} discount
+                </div>
+              ))}
+              <div className="border-t pt-2 mt-2">
+                <p className="font-medium text-green-600">
+                  Total Saved: ₹{Object.values(getValidCoinDiscounts()).reduce((sum, d) => sum + d.discountAmount, 0)}
+                </p>
+              </div>
+            </div>
+          )}
+          
+          <CartTotal appliedRedemption={appliedRedemption} coinDiscounts={getValidCoinDiscounts()} />
         </div>
+        
+        {/* Redemption Code Section */}
+        <div className="mt-8">
+          <RedemptionCodeInput 
+            cartTotal={getCartAmount() + delivery_fee - Object.values(getValidCoinDiscounts()).reduce((sum, d) => sum + d.discountAmount, 0)}
+            onCodeApplied={handleRedemptionCodeApplied}
+            appliedRedemption={appliedRedemption}
+            hasActiveCoinDiscounts={hasActiveCoinDiscounts()}
+          />
+        </div>
+        
         <div className="mt-12">
           <Title text1={"PAYMENT"} text2={"METHOD"} />
           {/* Payment Methods  */}

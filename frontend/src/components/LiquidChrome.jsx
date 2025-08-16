@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { Renderer, Program, Mesh, Triangle } from "ogl";
 
 export const LiquidChrome = ({
@@ -11,9 +11,15 @@ export const LiquidChrome = ({
   ...props
 }) => {
   const containerRef = useRef(null);
+  const isInitializedRef = useRef(false);
+
+  // Memoize base color to prevent unnecessary re-renders
+  const memoizedBaseColor = useMemo(() => new Float32Array(baseColor), [JSON.stringify(baseColor)]);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isInitializedRef.current) return;
+
+    isInitializedRef.current = true;
 
     const container = containerRef.current;
     // Enable built-in antialiasing.
@@ -98,7 +104,7 @@ export const LiquidChrome = ({
             gl.canvas.width / gl.canvas.height,
           ]),
         },
-        uBaseColor: { value: new Float32Array(baseColor) },
+        uBaseColor: { value: memoizedBaseColor },
         uAmplitude: { value: amplitude },
         uFrequencyX: { value: frequencyX },
         uFrequencyY: { value: frequencyY },
@@ -172,8 +178,10 @@ export const LiquidChrome = ({
         gl.canvas.parentElement.removeChild(gl.canvas);
       }
       gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // Reset initialization state for potential re-mount
+      isInitializedRef.current = false;
     };
-  }, [baseColor, speed, amplitude, frequencyX, frequencyY, interactive]);
+  }, [memoizedBaseColor, speed, amplitude, frequencyX, frequencyY, interactive]);
 
   return (
     <div

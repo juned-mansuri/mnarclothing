@@ -6,9 +6,12 @@ import {
   removeProduct,
   singleProduct,
   updateProduct,
+  getEarlyAccessProducts,
+  getLimitedEditionProducts,
 } from "../controllers/productController.js";
 import upload from "../middleware/multer.js";
 import adminAuth from "../middleware/adminAuth.js";
+import authUser from "../middleware/auth.js";
 
 const productRouter = express.Router();
 
@@ -38,5 +41,9 @@ productRouter.post(
   ]),
   updateProduct
 );
+
+// Special access routes
+productRouter.get("/early-access", authUser, getEarlyAccessProducts);
+productRouter.get("/limited-edition", authUser, getLimitedEditionProducts);
 
 export default productRouter;

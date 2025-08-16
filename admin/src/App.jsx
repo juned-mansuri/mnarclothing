@@ -9,6 +9,8 @@ import Login from "./components/Login";
 import { ToastContainer,  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Glimpses from "./pages/Glimpses";
+import CoinsManager from "./pages/CoinsManager";
+import RedeemCodeManager from "./pages/RedeemCodeManager";
 
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -38,6 +40,8 @@ useEffect(()=>{
                 <Route path="/list" element={<List token={token} />} />
                 <Route path="/orders" element={<Orders token={token} />} />
                 <Route path="/glimpses" element={<Glimpses token={token} />} />
+                <Route path="/coins" element={<CoinsManager token={token} />} />
+                <Route path="/redeem-codes" element={<RedeemCodeManager token={token} />} />
               </Routes>
             </div>
           </div>
