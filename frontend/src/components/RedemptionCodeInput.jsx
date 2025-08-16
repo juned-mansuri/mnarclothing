@@ -130,7 +130,7 @@ const RedemptionCodeInput = ({ cartTotal, onCodeApplied, appliedRedemption, hasA
                 {!hasActiveCoinDiscounts && (
                     <p>• Check your <span 
                         className="text-blue-600 cursor-pointer hover:underline" 
-                        onClick={() => navigate('/redemption')}
+                        onClick={() => navigate('/my-redemptions')}
                     >redemptions page</span> for available codes</p>
                 )}
                 {hasActiveCoinDiscounts && (
