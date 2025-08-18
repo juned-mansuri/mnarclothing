@@ -196,6 +196,36 @@ const placeOrder = async (req, res) => {
     // Update product stock after order is saved
     await updateProductStock(items);
 
+    // Deduct coins if coin discounts were used
+    if (hasCoinDiscounts && totalCoinsUsed > 0) {
+      try {
+        const user = await userModel.findById(userId);
+        if (user && user.mnarCoins >= totalCoinsUsed) {
+          await userModel.findByIdAndUpdate(userId, {
+            $inc: { mnarCoins: -totalCoinsUsed }
+          });
+          
+          // Create coin transaction record for the deduction
+          const coinTransactionModel = (await import('../models/coinTransactionModel.js')).default;
+          await coinTransactionModel.create({
+            userId: userId,
+            type: 'REDEEM',
+            action: 'COIN_DISCOUNT_ORDER',
+            coins: totalCoinsUsed,
+            description: `Coins used for order discount - Order #${newOrder._id}`,
+            orderId: newOrder._id.toString(),
+            status: 'COMPLETED'
+          });
+        } else {
+          console.error('Insufficient coins for deduction or user not found');
+          // Don't fail the order, but log the issue
+        }
+      } catch (coinDeductionError) {
+        console.error('Error deducting coins for order:', coinDeductionError);
+        // Don't fail the order if coin deduction fails
+      }
+    }
+
     // Award purchase coins based on final amount paid
     try {
       await awardPurchaseCoins(userId, amount, newOrder._id.toString());
@@ -316,6 +346,36 @@ const verifyRazorpay = async (req, res) => {
 
       // Update product stock after successful payment
       await updateProductStock(orderData.items);
+
+      // Deduct coins if coin discounts were used
+      if (hasCoinDiscounts && orderData.totalCoinsUsed > 0) {
+        try {
+          const user = await userModel.findById(userId);
+          if (user && user.mnarCoins >= orderData.totalCoinsUsed) {
+            await userModel.findByIdAndUpdate(userId, {
+              $inc: { mnarCoins: -orderData.totalCoinsUsed }
+            });
+            
+            // Create coin transaction record for the deduction
+            const coinTransactionModel = (await import('../models/coinTransactionModel.js')).default;
+            await coinTransactionModel.create({
+              userId: userId,
+              type: 'REDEEM',
+              action: 'COIN_DISCOUNT_ORDER',
+              coins: orderData.totalCoinsUsed,
+              description: `Coins used for order discount - Order #${newOrder._id}`,
+              orderId: newOrder._id.toString(),
+              status: 'COMPLETED'
+            });
+          } else {
+            console.error('Insufficient coins for deduction or user not found');
+            // Don't fail the order, but log the issue
+          }
+        } catch (coinDeductionError) {
+          console.error('Error deducting coins for order:', coinDeductionError);
+          // Don't fail the order if coin deduction fails
+        }
+      }
 
       // Award MNAR Coins for purchase based on final amount paid
       try {

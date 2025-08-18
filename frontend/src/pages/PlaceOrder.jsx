@@ -23,6 +23,7 @@ const PlaceOrder = () => {
     cartCoinDiscounts,
     setCartCoinDiscounts,
     clearAllCoinDiscounts,
+    getCoinBalance,
   } = useContext(ShopContext);
 
   // Check if coins are being used for discounts
@@ -70,10 +71,17 @@ const PlaceOrder = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const clearCartAndDiscounts = () => {
+  const clearCartAndDiscounts = async () => {
     setCartItems({});
     setCartCoinDiscounts({});
     localStorage.removeItem('cartCoinDiscounts');
+    
+    // Refresh coin balance from backend to ensure sync after successful order
+    if (getCoinBalance) {
+      setTimeout(() => {
+        getCoinBalance();
+      }, 1000);
+    }
   };
 
   // At the top of your component, add this useEffect to load the script

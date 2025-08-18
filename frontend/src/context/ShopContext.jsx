@@ -57,8 +57,8 @@ const ShopContextProvider = ({ children }) => {
       setCartCoinDiscounts(newDiscounts);
       localStorage.setItem('cartCoinDiscounts', JSON.stringify(newDiscounts));
       
-      // Deduct coins from balance
-      setCoinBalance(prevBalance => prevBalance - discountData.coinsUsed);
+      // Note: Coins will be deducted by backend when order is placed successfully
+      // No optimistic deduction here to avoid double deduction issues
     } else {
       // Remove any existing discount for this item if no coins are being used
       if (newDiscounts[discountKey]) {
@@ -96,6 +96,22 @@ const ShopContextProvider = ({ children }) => {
 
   const updateQuantity = async (itemId, size, quantity) => {
     let cartData = structuredClone(cartItems);
+    
+    // Handle coin discount removal when item is removed (quantity = 0)
+    if (quantity === 0) {
+      const discountKey = `${itemId}_${size}`;
+      const existingDiscount = cartCoinDiscounts[discountKey];
+      
+      if (existingDiscount && existingDiscount.coinsUsed > 0) {
+        // Remove discount from state (no coin refund needed since coins weren't deducted yet)
+        const newDiscounts = { ...cartCoinDiscounts };
+        delete newDiscounts[discountKey];
+        setCartCoinDiscounts(newDiscounts);
+        localStorage.setItem('cartCoinDiscounts', JSON.stringify(newDiscounts));
+        
+        toast.success(`Coin discount removed for removed item`);
+      }
+    }
 
     cartData[itemId][size] = quantity;
 
